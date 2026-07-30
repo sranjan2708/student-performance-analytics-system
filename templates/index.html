@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Student Performance Analytics System</title>
 </head>
+
 <body>
-    <h1>Student List</h1>
 
-    {% for student in students %}
+    <h1>Student Performance Analytics System</h1>
 
-        <h2> {{student}} </h2>
-    {% endfor %}
+    <form method="POST" enctype="multipart/form-data">
+
+        <input type="file" name="marks">
+
+        <br><br>
+
+        <button type="submit">
+            Upload CSV
+        </button>
+
+    </form>
+
+    {% if message %}
+
+        <h2>{{ message }}</h2>
+
+    {% endif %}
+
 </body>
+
 </html>
