@@ -1,4 +1,9 @@
 from flask import Flask, render_template, request
+import pandas as pd 
+from analytics import (
+    calculate_overall_statistics,
+    calculate_subject_statistics
+)
 
 app = Flask(__name__)
 
@@ -9,12 +14,25 @@ def home():
 
         uploaded_file = request.files["marks"]
 
+        df = pd.read_csv(uploaded_file)
+
+        overall_statistics = calculate_overall_statistics(df)
+
+        subject_statistics = calculate_subject_statistics(df)
+
         return render_template(
             "index.html",
-            message = f"{uploaded_file.filename} uploaded successfully!"
+            message = f"{uploaded_file.filename} uploaded successfully!",
+            overall_statistics = overall_statistics,
+            subject_statistics = subject_statistics
         )
 
-    return render_template("index.html", message=None)
+    return render_template(
+        "index.html",
+        message = None,
+        overall_statistics = None,
+        subject_statistics = None
+    )
 
 
 if __name__ == "__main__":

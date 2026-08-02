@@ -27,6 +27,76 @@
 
     {% endif %}
 
+    {% if overall_statistics %}
+
+        <h2>Overall Statistics</h2>
+
+        <p>
+            <strong>Total Students:</strong>
+            {{ overall_statistics.total_students }}
+        </p>
+
+        <p>
+            <strong>Pass Students:</strong>
+            {{ overall_statistics.pass_count }}
+        </p>
+
+        <p>
+            <strong>Fail Students:</strong>
+            {{ overall_statistics.fail_count }}
+        </p>
+
+        <p>
+            <strong>Overall Average:</strong>
+            {{ overall_statistics.overall_average }}
+        </p>
+
+        <p>
+            <strong>Highest Overall Score:</strong>
+            {{ overall_statistics.highest_total }}
+        </p>
+
+        <p>
+            <strong>Lowest Overall Score:</strong>
+            {{ overall_statistics.lowest_total }}
+        </p>
+
+        <p>
+            <strong>Topper:</strong>
+            {{ overall_statistics.topper }}
+        </p>
+
+    {% endif %}
+
+    {% if subject_statistics %}
+
+        <h2>Subject Statistics</h2>
+
+        {% for subject, stats in subject_statistics.items() %}
+
+            <h3>{{ subject }}</h3>
+
+            <p>
+                <strong>Average Marks:</strong>
+                {{ stats.average }}
+            </p>
+
+            <p>
+                <strong>Highest Marks:</strong>
+                {{ stats.highest }}
+            </p>
+
+            <p>
+                <strong>Lowest Marks:</strong>
+                {{ stats.lowest }}
+            </p>
+
+            <hr>
+
+        {% endfor %}
+
+    {% endif %}
+
 </body>
 
 </html>
