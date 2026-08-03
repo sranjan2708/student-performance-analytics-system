@@ -231,3 +231,11 @@ section h2{
     color:#1f4e79;
 
 }
+
+.chart {
+    display: block;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-radius: 10px;
+}

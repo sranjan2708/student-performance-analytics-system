@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import pandas as pd 
+from charts import create_subject_bar_chart
 from analytics import (
     calculate_overall_statistics,
     calculate_subject_statistics
@@ -19,6 +20,10 @@ def home():
         overall_statistics = calculate_overall_statistics(df)
 
         subject_statistics = calculate_subject_statistics(df)
+
+        # Generate the subject average bar chart
+
+        create_subject_bar_chart(subject_statistics)
 
         return render_template(
             "index.html",

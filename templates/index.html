@@ -20,7 +20,7 @@
 
         <header>
 
-            <h1> Student Performance Analytics System</h1>
+            <h1>Student Performance Analytics System</h1>
 
             <p>
                 Upload a CSV file to generate student performance analytics.
@@ -107,7 +107,7 @@
                 </div>
 
                 <div class="card topper-card">
-                    <h3> Topper</h3>
+                    <h3>Topper</h3>
                     <p>{{ overall_statistics.topper }}</p>
                 </div>
 
@@ -166,6 +166,22 @@
                 </tbody>
 
             </table>
+
+        </section>
+
+        <!-- ========================= -->
+        <!-- Subject Average Chart -->
+        <!-- ========================= -->
+
+        <section>
+
+            <h2>Subject Average Marks Chart</h2>
+
+            <img
+                src="{{ url_for('static', filename='chart.png') }}"
+                alt="Subject Average Marks Chart"
+                class="chart"
+            >
 
         </section>
 
