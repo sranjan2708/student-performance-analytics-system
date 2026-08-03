@@ -1,101 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Student Performance Analytics System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-    <h1>Student Performance Analytics System</h1>
+    <div class="container">
 
-    <form method="POST" enctype="multipart/form-data">
+        <!-- ========================= -->
+        <!-- Header Section -->
+        <!-- ========================= -->
 
-        <input type="file" name="marks">
+        <header>
 
-        <br><br>
-
-        <button type="submit">
-            Upload CSV
-        </button>
-
-    </form>
-
-    {% if message %}
-
-        <h2>{{ message }}</h2>
-
-    {% endif %}
-
-    {% if overall_statistics %}
-
-        <h2>Overall Statistics</h2>
-
-        <p>
-            <strong>Total Students:</strong>
-            {{ overall_statistics.total_students }}
-        </p>
-
-        <p>
-            <strong>Pass Students:</strong>
-            {{ overall_statistics.pass_count }}
-        </p>
-
-        <p>
-            <strong>Fail Students:</strong>
-            {{ overall_statistics.fail_count }}
-        </p>
-
-        <p>
-            <strong>Overall Average:</strong>
-            {{ overall_statistics.overall_average }}
-        </p>
-
-        <p>
-            <strong>Highest Overall Score:</strong>
-            {{ overall_statistics.highest_total }}
-        </p>
-
-        <p>
-            <strong>Lowest Overall Score:</strong>
-            {{ overall_statistics.lowest_total }}
-        </p>
-
-        <p>
-            <strong>Topper:</strong>
-            {{ overall_statistics.topper }}
-        </p>
-
-    {% endif %}
-
-    {% if subject_statistics %}
-
-        <h2>Subject Statistics</h2>
-
-        {% for subject, stats in subject_statistics.items() %}
-
-            <h3>{{ subject }}</h3>
+            <h1> Student Performance Analytics System</h1>
 
             <p>
-                <strong>Average Marks:</strong>
-                {{ stats.average }}
+                Upload a CSV file to generate student performance analytics.
             </p>
 
-            <p>
-                <strong>Highest Marks:</strong>
-                {{ stats.highest }}
-            </p>
+        </header>
 
-            <p>
-                <strong>Lowest Marks:</strong>
-                {{ stats.lowest }}
-            </p>
+        <!-- ========================= -->
+        <!-- Upload Section -->
+        <!-- ========================= -->
 
-            <hr>
+        <section class="upload-section">
 
-        {% endfor %}
+            <form method="POST" enctype="multipart/form-data">
 
-    {% endif %}
+                <input
+                    type="file"
+                    name="marks"
+                    required
+                >
+
+                <button type="submit">
+                    Upload CSV
+                </button>
+
+            </form>
+
+        </section>
+
+        <!-- ========================= -->
+        <!-- Success Message -->
+        <!-- ========================= -->
+
+        {% if message %}
+
+            <section class="message">
+
+                <h3>{{ message }}</h3>
+
+            </section>
+
+        {% endif %}
+
+        <!-- ========================= -->
+        <!-- Overall Statistics -->
+        <!-- ========================= -->
+
+        {% if overall_statistics %}
+
+        <section>
+
+            <h2>Overall Statistics</h2>
+
+            <div class="cards">
+
+                <div class="card">
+                    <h3>Total Students</h3>
+                    <p>{{ overall_statistics.total_students }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>Passed Students</h3>
+                    <p>{{ overall_statistics.pass_count }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>Failed Students</h3>
+                    <p>{{ overall_statistics.fail_count }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>Overall Average</h3>
+                    <p>{{ overall_statistics.overall_average }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>Highest Score</h3>
+                    <p>{{ overall_statistics.highest_total }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>Lowest Score</h3>
+                    <p>{{ overall_statistics.lowest_total }}</p>
+                </div>
+
+                <div class="card topper-card">
+                    <h3> Topper</h3>
+                    <p>{{ overall_statistics.topper }}</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+        <!-- ========================= -->
+        <!-- Subject Statistics -->
+        <!-- ========================= -->
+
+        {% if subject_statistics %}
+
+        <section>
+
+            <h2>Subject Statistics</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Subject</th>
+
+                        <th>Average</th>
+
+                        <th>Highest</th>
+
+                        <th>Lowest</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for subject, stats in subject_statistics.items() %}
+
+                    <tr>
+
+                        <td>{{ subject }}</td>
+
+                        <td>{{ stats.average }}</td>
+
+                        <td>{{ stats.highest }}</td>
+
+                        <td>{{ stats.lowest }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+        {% endif %}
+
+    </div>
 
 </body>
 
