@@ -10,6 +10,17 @@ SUBJECTS = [
 ]
 
 def calculate_overall_statistics(df):
+
+    """
+    Calculates overall student statistics such as:
+    - Total students
+    - Pass count
+    - Fail count
+    - Overall average
+    - Highest score
+    - Lowest score
+    - Topper
+    """
     total_students = len(df)
     overall_statistics = {}
 
