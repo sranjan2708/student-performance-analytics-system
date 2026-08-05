@@ -56,11 +56,11 @@
 
         {% if message %}
 
-            <section class="message">
+        <section class="message">
 
-                <h3>{{ message }}</h3>
+            <h3>{{ message }}</h3>
 
-            </section>
+        </section>
 
         {% endif %}
 
@@ -134,11 +134,8 @@
                     <tr>
 
                         <th>Subject</th>
-
                         <th>Average</th>
-
                         <th>Highest</th>
-
                         <th>Lowest</th>
 
                     </tr>
@@ -152,11 +149,8 @@
                     <tr>
 
                         <td>{{ subject }}</td>
-
                         <td>{{ stats.average }}</td>
-
                         <td>{{ stats.highest }}</td>
-
                         <td>{{ stats.lowest }}</td>
 
                     </tr>
@@ -180,6 +174,38 @@
             <img
                 src="{{ url_for('static', filename='chart.png') }}"
                 alt="Subject Average Marks Chart"
+                class="chart"
+            >
+
+        </section>
+
+        <!-- ========================= -->
+        <!-- Pass vs Fail Pie Chart -->
+        <!-- ========================= -->
+
+        <section>
+
+            <h2>Pass vs Fail Distribution</h2>
+
+            <img
+                src="{{ url_for('static', filename='pass_fail_chart.png') }}"
+                alt="Pass vs Fail Pie Chart"
+                class="chart"
+            >
+
+        </section>
+
+        <!-- ========================= -->
+        <!-- Marks Distribution Histogram -->
+        <!-- ========================= -->
+
+        <section>
+
+            <h2>Marks Distribution Histogram</h2>
+
+            <img
+                src="{{ url_for('static', filename='marks_histogram.png') }}"
+                alt="Marks Distribution Histogram"
                 class="chart"
             >
 

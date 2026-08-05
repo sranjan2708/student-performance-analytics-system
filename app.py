@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request
 import pandas as pd 
-from charts import create_subject_bar_chart
+from charts import (
+    create_subject_bar_chart,
+    create_pass_fail_pie_chart,
+    create_marks_histogram
+)
 from analytics import (
     calculate_overall_statistics,
     calculate_subject_statistics
@@ -24,6 +28,14 @@ def home():
         # Generate the subject average bar chart
 
         create_subject_bar_chart(subject_statistics)
+
+        #Generate the pie chart based on overall stats
+
+        create_pass_fail_pie_chart(overall_statistics)
+
+        #Generate the histogram 
+
+        create_marks_histogram(df)
 
         return render_template(
             "index.html",
