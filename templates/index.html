@@ -2,218 +2,174 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Performance Analytics System</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>
+
+        Student Performance Analytics System
+
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
 </head>
 
 <body>
 
-    <div class="container">
+    <!-- ========================================= -->
+    <!-- Upload Page -->
+    <!-- ========================================= -->
 
-        <!-- ========================= -->
-        <!-- Header Section -->
-        <!-- ========================= -->
+    <main class="upload-page">
 
-        <header>
+        <section class="upload-container">
 
-            <h1>Student Performance Analytics System</h1>
+            <!-- ========================= -->
+            <!-- Project Heading -->
+            <!-- ========================= -->
 
-            <p>
-                Upload a CSV file to generate student performance analytics.
-            </p>
+            <div class="upload-header">
 
-        </header>
+                <h1>
 
-        <!-- ========================= -->
-        <!-- Upload Section -->
-        <!-- ========================= -->
+                    Student Performance Analytics System
 
-        <section class="upload-section">
+                </h1>
 
-            <form method="POST" enctype="multipart/form-data">
+                <p>
 
-                <input
-                    type="file"
-                    name="marks"
-                    required
-                >
+                    Upload a CSV file to generate student performance
+                    analytics including overall statistics,
+                    subject analysis and graphical reports.
 
-                <button type="submit">
-                    Upload CSV
-                </button>
-
-            </form>
-
-        </section>
-
-        <!-- ========================= -->
-        <!-- Success Message -->
-        <!-- ========================= -->
-
-        {% if message %}
-
-        <section class="message">
-
-            <h3>{{ message }}</h3>
-
-        </section>
-
-        {% endif %}
-
-        <!-- ========================= -->
-        <!-- Overall Statistics -->
-        <!-- ========================= -->
-
-        {% if overall_statistics %}
-
-        <section>
-
-            <h2>Overall Statistics</h2>
-
-            <div class="cards">
-
-                <div class="card">
-                    <h3>Total Students</h3>
-                    <p>{{ overall_statistics.total_students }}</p>
-                </div>
-
-                <div class="card">
-                    <h3>Passed Students</h3>
-                    <p>{{ overall_statistics.pass_count }}</p>
-                </div>
-
-                <div class="card">
-                    <h3>Failed Students</h3>
-                    <p>{{ overall_statistics.fail_count }}</p>
-                </div>
-
-                <div class="card">
-                    <h3>Overall Average</h3>
-                    <p>{{ overall_statistics.overall_average }}</p>
-                </div>
-
-                <div class="card">
-                    <h3>Highest Score</h3>
-                    <p>{{ overall_statistics.highest_total }}</p>
-                </div>
-
-                <div class="card">
-                    <h3>Lowest Score</h3>
-                    <p>{{ overall_statistics.lowest_total }}</p>
-                </div>
-
-                <div class="card topper-card">
-                    <h3>Topper</h3>
-                    <p>{{ overall_statistics.topper }}</p>
-                </div>
+                </p>
 
             </div>
 
+
+
+            <!-- ========================= -->
+            <!-- Upload Form -->
+            <!-- ========================= -->
+
+            <section class="upload-section">
+
+                <form
+                    method="POST"
+                    enctype="multipart/form-data"
+                >
+
+                    <input
+                        type="file"
+                        name="marks"
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                    >
+
+                        Upload CSV
+
+                    </button>
+
+                </form>
+
+            </section>
+
+
+
+            <!-- ========================= -->
+            <!-- Optional Message -->
+            <!-- ========================= -->
+
+            {% if message %}
+
+            <section class="message-section">
+
+                <div class="message-box">
+
+                    {{ message }}
+
+                </div>
+
+            </section>
+
+            {% endif %}
+
+
+
+            <!-- ========================= -->
+            <!-- Features -->
+            <!-- ========================= -->
+
+            <section class="feature-section">
+
+                <div class="feature-card">
+
+                    <h3>
+
+                        Overall Statistics
+
+                    </h3>
+
+                    <p>
+
+                        View overall student performance including average,
+                        highest score, lowest score and topper details.
+
+                    </p>
+
+                </div>
+
+                <div class="feature-card">
+
+                    <h3>
+
+                        Subject Statistics
+
+                    </h3>
+
+                    <p>
+
+                        Analyze subject-wise average,
+                        highest and lowest marks for every subject.
+
+                    </p>
+
+                </div>
+
+                <div class="feature-card">
+
+                    <h3>
+
+                        Performance Charts
+
+                    </h3>
+
+                    <p>
+
+                        Visualize student performance using bar charts,
+                        pie charts and histograms.
+
+                    </p>
+
+                </div>
+
+            </section>
+
         </section>
 
-        {% endif %}
-
-        <!-- ========================= -->
-        <!-- Subject Statistics -->
-        <!-- ========================= -->
-
-        {% if subject_statistics %}
-
-        <section>
-
-            <h2>Subject Statistics</h2>
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>Subject</th>
-                        <th>Average</th>
-                        <th>Highest</th>
-                        <th>Lowest</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {% for subject, stats in subject_statistics.items() %}
-
-                    <tr>
-
-                        <td>{{ subject }}</td>
-                        <td>{{ stats.average }}</td>
-                        <td>{{ stats.highest }}</td>
-                        <td>{{ stats.lowest }}</td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </section>
-
-        <!-- ========================= -->
-        <!-- Subject Average Chart -->
-        <!-- ========================= -->
-
-        <section>
-
-            <h2>Subject Average Marks Chart</h2>
-
-            <img
-                src="{{ url_for('static', filename='chart.png') }}"
-                alt="Subject Average Marks Chart"
-                class="chart"
-            >
-
-        </section>
-
-        <!-- ========================= -->
-        <!-- Pass vs Fail Pie Chart -->
-        <!-- ========================= -->
-
-        <section>
-
-            <h2>Pass vs Fail Distribution</h2>
-
-            <img
-                src="{{ url_for('static', filename='pass_fail_chart.png') }}"
-                alt="Pass vs Fail Pie Chart"
-                class="chart"
-            >
-
-        </section>
-
-        <!-- ========================= -->
-        <!-- Marks Distribution Histogram -->
-        <!-- ========================= -->
-
-        <section>
-
-            <h2>Marks Distribution Histogram</h2>
-
-            <img
-                src="{{ url_for('static', filename='marks_histogram.png') }}"
-                alt="Marks Distribution Histogram"
-                class="chart"
-            >
-
-        </section>
-
-        {% endif %}
-
-    </div>
+    </main>
 
 </body>
 

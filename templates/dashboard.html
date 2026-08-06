@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Student Performance Analytics System
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <!-- ========================================= -->
+    <!-- Navigation Bar -->
+    <!-- ========================================= -->
+
+    <header class="navbar">
+
+        <div class="nav-container">
+
+            <div class="logo">
+
+                <h1>
+                    Student Performance Analytics System
+                </h1>
+
+            </div>
+
+            <nav>
+
+                <ul class="nav-links">
+
+                    <li>
+
+                        <a href="{{ url_for('home') }}">
+                            Upload New Report
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================================= -->
+    <!-- Main Dashboard -->
+    <!-- ========================================= -->
+
+    <main class="dashboard-container">
+
+        <!-- ================================ -->
+        <!-- Dashboard Header -->
+        <!-- ================================ -->
+
+        <section class="dashboard-header">
+
+            <div class="dashboard-title">
+
+                <h2>
+                    Overall Statistics
+                </h2>
+
+                <p>
+
+                    View the complete performance analysis of uploaded student
+                    records including charts, statistics and subject analysis.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================================ -->
+        <!-- Success Message -->
+        <!-- ================================ -->
+
+        {% if message %}
+
+        <section class="message-section">
+
+            <div class="message-box">
+
+                {{ message }}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+
+        <!-- ================================ -->
+        <!-- Overall Statistics -->
+        <!-- ================================ -->
+
+        {% if overall_statistics %}
+
+        <section class="stats-section">
+
+            <div class="section-heading">
+
+                <h2>
+
+                    Overall Statistics
+
+                </h2>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+                <!-- Card -->
+
+                <div class="stat-card">
+
+                    <h3>
+
+                        Total Students
+
+                    </h3>
+
+                    <p>
+
+                        {{ overall_statistics.total_students }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Card -->
+
+                <div class="stat-card">
+
+                    <h3>
+
+                        Passed Students
+
+                    </h3>
+
+                    <p>
+
+                        {{ overall_statistics.pass_count }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Card -->
+
+                <div class="stat-card">
+
+                    <h3>
+
+                        Failed Students
+
+                    </h3>
+
+                    <p>
+
+                        {{ overall_statistics.fail_count }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Card -->
+
+                <div class="stat-card">
+
+                    <h3>
+
+                        Overall Average
+
+                    </h3>
+
+                    <p>
+
+                        {{ overall_statistics.overall_average }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Card -->
+
+                <div class="stat-card">
+
+                    <h3>
+
+                        Highest Score
+
+                    </h3>
+
+                    <p>
+
+                        {{ overall_statistics.highest_total }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Card -->
+
+                <div class="stat-card">
+
+                    <h3>
+
+                        Lowest Score
+
+                    </h3>
+
+                    <p>
+
+                        {{ overall_statistics.lowest_total }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Topper Card -->
+
+                <div class="stat-card topper-card">
+
+                    <h3>
+
+                        Topper
+
+                    </h3>
+
+                    <p>
+
+                        {{ overall_statistics.topper }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+
+
+        <!-- ===================================== -->
+        <!-- Charts Section -->
+        <!-- ===================================== -->
+
+        <section class="charts-section">
+
+            <div class="section-heading">
+
+                <h2>
+
+                    Performance Charts
+
+                </h2>
+
+            </div>
+
+            <div class="chart-grid">
+                                <!-- ===================================== -->
+                <!-- Subject Average Marks Chart -->
+                <!-- ===================================== -->
+
+                <div class="chart-card">
+
+                    <h3>
+                        Subject Average Marks Chart
+                    </h3>
+
+                    <img
+                        src="{{ url_for('static', filename='chart.png') }}"
+                        alt="Subject Average Marks Chart"
+                        class="chart"
+                    >
+
+                </div>
+
+
+
+                <!-- ===================================== -->
+                <!-- Pass vs Fail Distribution -->
+                <!-- ===================================== -->
+
+                <div class="chart-card">
+
+                    <h3>
+                        Pass vs Fail Distribution
+                    </h3>
+
+                    <img
+                        src="{{ url_for('static', filename='pass_fail_chart.png') }}"
+                        alt="Pass vs Fail Distribution"
+                        class="chart"
+                    >
+
+                </div>
+
+
+
+                <!-- ===================================== -->
+                <!-- Marks Distribution Histogram -->
+                <!-- ===================================== -->
+
+                <div class="chart-card full-width">
+
+                    <h3>
+                        Marks Distribution Histogram
+                    </h3>
+
+                    <img
+                        src="{{ url_for('static', filename='marks_histogram.png') }}"
+                        alt="Marks Distribution Histogram"
+                        class="chart"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+
+        <!-- ===================================== -->
+        <!-- Subject Statistics -->
+        <!-- ===================================== -->
+
+        {% if subject_statistics %}
+
+        <section class="table-section">
+
+            <div class="section-heading">
+
+                <h2>
+
+                    Subject Statistics
+
+                </h2>
+
+            </div>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Subject</th>
+
+                            <th>Average</th>
+
+                            <th>Highest</th>
+
+                            <th>Lowest</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for subject, stats in subject_statistics.items() %}
+
+                        <tr>
+
+                            <td>
+
+                                {{ subject }}
+
+                            </td>
+
+                            <td>
+
+                                {{ stats.average }}
+
+                            </td>
+
+                            <td>
+
+                                {{ stats.highest }}
+
+                            </td>
+
+                            <td>
+
+                                {{ stats.lowest }}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+    </main>
+
+
+
+    <!-- ===================================== -->
+    <!-- Footer -->
+    <!-- ===================================== -->
+
+    <footer>
+
+        <div class="footer-container">
+
+            <p>
+
+                Student Performance Analytics System
+
+            </p>
+
+            <p>
+
+                Built using Flask, Pandas, Matplotlib and Jinja2
+
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>
