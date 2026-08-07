@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import pandas as pd
+import os
 
 from charts import (
     create_subject_bar_chart,
@@ -60,6 +61,21 @@ def home():
             "index.html",
             message="Please upload a valid CSV file."
         )
+
+
+    
+    # ==========================================
+    # Save Uploaded File
+    # ==========================================
+
+    file_path = os.path.join(
+        "uploads",
+        uploaded_file.filename
+    )
+
+    uploaded_file.save(file_path)
+
+
 
 
     # ==========================================
