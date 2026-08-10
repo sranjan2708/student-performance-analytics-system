@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Student Performance | Student Analytics System
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+
+    <!-- ========================================= -->
+    <!-- Navigation Bar -->
+    <!-- ========================================= -->
+
+    <header class="navbar">
+
+        <div class="nav-container">
+
+            <div class="logo">
+
+                <h1>
+                    Student Performance Analytics System
+                </h1>
+
+            </div>
+
+            <nav>
+
+                <ul class="nav-links">
+
+                    <li>
+
+                        <a href="{{ url_for('home') }}">
+                            Upload New Report
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="{{ url_for('home') }}">
+                            Dashboard
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- ========================================= -->
+    <!-- Main Student Profile -->
+    <!-- ========================================= -->
+
+    <main class="student-page-container">
+
+
+        <!-- ========================================= -->
+        <!-- Page Header -->
+        <!-- ========================================= -->
+
+        <section class="student-page-header">
+
+            <p class="page-label">
+                Individual Performance Report
+            </p>
+
+            <h2>
+                {{ student.Name }}
+            </h2>
+
+            <p>
+                Detailed academic performance of the selected student.
+            </p>
+
+        </section>
+
+
+        <!-- ========================================= -->
+        <!-- Student Summary -->
+        <!-- ========================================= -->
+
+        <section class="student-summary-section">
+
+            <div class="student-summary-card">
+
+                <h3>
+                    Student Name
+                </h3>
+
+                <p>
+                    {{ student.Name }}
+                </p>
+
+            </div>
+
+
+            <div class="student-summary-card">
+
+                <h3>
+                    Total Marks
+                </h3>
+
+                <p>
+                    {{ student.Total }}
+                </p>
+
+            </div>
+
+
+            <div class="student-summary-card">
+
+                <h3>
+                    Average
+                </h3>
+
+                <p>
+                    {{ student.Average }}
+                </p>
+
+            </div>
+
+
+            <div class="student-summary-card">
+
+                <h3>
+                    Result
+                </h3>
+
+                <p class="result-value">
+                    {{ student.Result }}
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================= -->
+        <!-- Subject Performance -->
+        <!-- ========================================= -->
+
+        <section class="student-subject-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Subject Performance
+                </h2>
+
+                <p>
+                    Marks obtained by {{ student.Name }} in each subject.
+                </p>
+
+            </div>
+
+
+            <div class="student-subject-grid">
+
+
+                <!-- Maths -->
+
+                <div class="subject-performance-card">
+
+                    <h3>
+                        Mathematics
+                    </h3>
+
+                    <p class="subject-mark">
+                        {{ student.Math }}
+                    </p>
+
+                    <span>
+                        Marks
+                    </span>
+
+                </div>
+
+
+                <!-- Science -->
+
+                <div class="subject-performance-card">
+
+                    <h3>
+                        Science
+                    </h3>
+
+                    <p class="subject-mark">
+                        {{ student.Science }}
+                    </p>
+
+                    <span>
+                        Marks
+                    </span>
+
+                </div>
+
+
+                <!-- English -->
+
+                <div class="subject-performance-card">
+
+                    <h3>
+                        English
+                    </h3>
+
+                    <p class="subject-mark">
+                        {{ student.English }}
+                    </p>
+
+                    <span>
+                        Marks
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================= -->
+        <!-- Performance Summary -->
+        <!-- ========================================= -->
+
+        <section class="performance-summary-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Performance Summary
+                </h2>
+
+            </div>
+
+
+            <div class="performance-summary-card">
+
+                <div>
+
+                    <h3>
+                        Overall Score
+                    </h3>
+
+                    <p>
+                        {{ student.Total }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Average Score
+                    </h3>
+
+                    <p>
+                        {{ student.Average }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Academic Result
+                    </h3>
+
+                    <p>
+                        {{ student.Result }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================= -->
+        <!-- Navigation Actions -->
+        <!-- ========================================= -->
+
+        <section class="student-actions">
+
+            <a
+                href="{{ url_for('home') }}"
+                class="secondary-button"
+            >
+                Upload New Report
+            </a>
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="primary-button"
+            >
+                Back to Dashboard
+            </a>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ========================================= -->
+    <!-- Footer -->
+    <!-- ========================================= -->
+
+    <footer>
+
+        <div class="footer-container">
+
+            <p>
+                Student Performance Analytics System
+            </p>
+
+            <p>
+                Built using Flask, Pandas, Matplotlib and Jinja2
+            </p>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>

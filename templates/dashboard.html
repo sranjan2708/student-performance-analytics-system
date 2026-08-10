@@ -23,6 +23,7 @@
 
 <body>
 
+
     <!-- ========================================= -->
     <!-- Navigation Bar -->
     <!-- ========================================= -->
@@ -67,9 +68,10 @@
 
     <main class="dashboard-container">
 
-        <!-- ================================ -->
+
+        <!-- ===================================== -->
         <!-- Dashboard Header -->
-        <!-- ================================ -->
+        <!-- ===================================== -->
 
         <section class="dashboard-header">
 
@@ -92,9 +94,9 @@
 
 
 
-        <!-- ================================ -->
-        <!-- Success Message -->
-        <!-- ================================ -->
+        <!-- ===================================== -->
+        <!-- Success / Error Message -->
+        <!-- ===================================== -->
 
         {% if message %}
 
@@ -112,9 +114,66 @@
 
 
 
-        <!-- ================================ -->
+        <!-- ===================================== -->
+        <!-- Student Performance Search -->
+        <!-- ===================================== -->
+
+        <section class="student-search-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Student Performance Search
+                </h2>
+
+                <p>
+                    Search for an individual student to view their academic
+                    performance and detailed marks.
+                </p>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('search_student') }}"
+                class="student-search-form"
+            >
+
+                <div class="search-input-container">
+
+                    <label for="student_name">
+                        Student Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="student_name"
+                        name="student_name"
+                        placeholder="Enter student name"
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="search-button"
+                >
+                    Search Student
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ===================================== -->
         <!-- Overall Statistics -->
-        <!-- ================================ -->
+        <!-- ===================================== -->
 
         {% if overall_statistics %}
 
@@ -123,9 +182,7 @@
             <div class="section-heading">
 
                 <h2>
-
                     Overall Statistics
-
                 </h2>
 
             </div>
@@ -133,140 +190,113 @@
 
             <div class="stats-grid">
 
-                <!-- Card -->
+
+                <!-- Total Students -->
 
                 <div class="stat-card">
 
                     <h3>
-
                         Total Students
-
                     </h3>
 
                     <p>
-
                         {{ overall_statistics.total_students }}
-
                     </p>
 
                 </div>
 
 
 
-                <!-- Card -->
+                <!-- Passed Students -->
 
                 <div class="stat-card">
 
                     <h3>
-
                         Passed Students
-
                     </h3>
 
                     <p>
-
                         {{ overall_statistics.pass_count }}
-
                     </p>
 
                 </div>
 
 
 
-                <!-- Card -->
+                <!-- Failed Students -->
 
                 <div class="stat-card">
 
                     <h3>
-
                         Failed Students
-
                     </h3>
 
                     <p>
-
                         {{ overall_statistics.fail_count }}
-
                     </p>
 
                 </div>
 
 
 
-                <!-- Card -->
+                <!-- Overall Average -->
 
                 <div class="stat-card">
 
                     <h3>
-
                         Overall Average
-
                     </h3>
 
                     <p>
-
                         {{ overall_statistics.overall_average }}
-
                     </p>
 
                 </div>
 
 
 
-                <!-- Card -->
+                <!-- Highest Score -->
 
                 <div class="stat-card">
 
                     <h3>
-
                         Highest Score
-
                     </h3>
 
                     <p>
-
                         {{ overall_statistics.highest_total }}
-
                     </p>
 
                 </div>
 
 
 
-                <!-- Card -->
+                <!-- Lowest Score -->
 
                 <div class="stat-card">
 
                     <h3>
-
                         Lowest Score
-
                     </h3>
 
                     <p>
-
                         {{ overall_statistics.lowest_total }}
-
                     </p>
 
                 </div>
 
 
 
-                <!-- Topper Card -->
+                <!-- Topper -->
 
                 <div class="stat-card topper-card">
 
                     <h3>
-
                         Topper
-
                     </h3>
 
                     <p>
-
                         {{ overall_statistics.topper }}
-
                     </p>
 
                 </div>
@@ -277,10 +307,8 @@
 
 
 
-
-
         <!-- ===================================== -->
-        <!-- Charts Section -->
+        <!-- Performance Charts -->
         <!-- ===================================== -->
 
         <section class="charts-section">
@@ -288,22 +316,28 @@
             <div class="section-heading">
 
                 <h2>
-
                     Performance Charts
-
                 </h2>
+
+                <p>
+                    Visual analysis of student performance across subjects
+                    and overall marks.
+                </p>
 
             </div>
 
+
             <div class="chart-grid">
-                                <!-- ===================================== -->
+
+
+                <!-- ===================================== -->
                 <!-- Subject Average Marks Chart -->
                 <!-- ===================================== -->
 
                 <div class="chart-card">
 
                     <h3>
-                        Subject Average Marks Chart
+                        Subject Average Marks
                     </h3>
 
                     <img
@@ -373,12 +407,16 @@
             <div class="section-heading">
 
                 <h2>
-
                     Subject Statistics
-
                 </h2>
 
+                <p>
+                    Summary of average, highest and lowest marks for each
+                    subject.
+                </p>
+
             </div>
+
 
             <div class="table-container">
 
@@ -388,17 +426,26 @@
 
                         <tr>
 
-                            <th>Subject</th>
+                            <th>
+                                Subject
+                            </th>
 
-                            <th>Average</th>
+                            <th>
+                                Average
+                            </th>
 
-                            <th>Highest</th>
+                            <th>
+                                Highest
+                            </th>
 
-                            <th>Lowest</th>
+                            <th>
+                                Lowest
+                            </th>
 
                         </tr>
 
                     </thead>
+
 
                     <tbody>
 
@@ -407,27 +454,19 @@
                         <tr>
 
                             <td>
-
                                 {{ subject }}
-
                             </td>
 
                             <td>
-
                                 {{ stats.average }}
-
                             </td>
 
                             <td>
-
                                 {{ stats.highest }}
-
                             </td>
 
                             <td>
-
                                 {{ stats.lowest }}
-
                             </td>
 
                         </tr>
@@ -444,6 +483,7 @@
 
         {% endif %}
 
+
     </main>
 
 
@@ -457,20 +497,17 @@
         <div class="footer-container">
 
             <p>
-
                 Student Performance Analytics System
-
             </p>
 
             <p>
-
                 Built using Flask, Pandas, Matplotlib and Jinja2
-
             </p>
 
         </div>
 
     </footer>
+
 
 </body>
 

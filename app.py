@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import pandas as pd
 import os
 
@@ -14,6 +14,8 @@ from analytics import (
 )
 
 app = Flask(__name__)
+
+app.secret_key = "student-performance-secret"
 
 
 # =====================================================
@@ -63,7 +65,6 @@ def home():
         )
 
 
-    
     # ==========================================
     # Save Uploaded File
     # ==========================================
@@ -75,7 +76,7 @@ def home():
 
     uploaded_file.save(file_path)
 
-
+    session["file_path"] = file_path
 
 
     # ==========================================
@@ -84,7 +85,7 @@ def home():
 
     try:
 
-        df = pd.read_csv(uploaded_file)
+        df = pd.read_csv(file_path)
 
     except Exception:
 
@@ -123,6 +124,93 @@ def home():
         message=f"{uploaded_file.filename} uploaded successfully!",
         overall_statistics=overall_statistics,
         subject_statistics=subject_statistics
+    )
+
+
+# =====================================================
+# Student Search Route
+# =====================================================
+
+@app.route("/search", methods=["POST"])
+def search_student():
+
+    # ==========================================
+    # Get Student Name
+    # ==========================================
+
+    search_name = request.form["student_name"].strip()
+
+
+    # ==========================================
+    # Get Saved File Path
+    # ==========================================
+
+    file_path = session.get("file_path")
+
+
+    # ==========================================
+    # Check Whether File Exists
+    # ==========================================
+
+    if not file_path or not os.path.exists(file_path):
+
+        return render_template(
+            "index.html",
+            message="Please upload a CSV file first."
+        )
+
+
+    # ==========================================
+    # Read Saved CSV
+    # ==========================================
+
+    try:
+
+        df = pd.read_csv(file_path)
+
+    except Exception:
+
+        return render_template(
+            "index.html",
+            message="Unable to read the saved CSV file."
+        )
+
+
+    # ==========================================
+    # Search Student
+    # ==========================================
+
+    student = df[
+        df["Name"].astype(str).str.lower() == search_name.lower()
+    ]
+
+
+    # ==========================================
+    # Student Not Found
+    # ==========================================
+
+    if student.empty:
+
+        return render_template(
+            "dashboard.html",
+            message=f"No student found with the name '{search_name}'."
+        )
+
+
+    # ==========================================
+    # Convert Student Row to Dictionary
+    # ==========================================
+
+    student_data = student.iloc[0].to_dict()
+
+
+    # ==========================================
+    # Display Student Details
+    # ==========================================
+
+    return render_template(
+        "student.html",
+        student=student_data
     )
 
 
