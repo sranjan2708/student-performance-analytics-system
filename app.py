@@ -246,9 +246,8 @@ def search_student():
     )
 
 
-
 # =====================================================
-# Student Filter Route
+# Student Filter and Sort Route
 # =====================================================
 
 @app.route("/filter", methods=["POST"])
@@ -302,15 +301,51 @@ def filter_students():
 
     if result_filter == "Pass":
 
-        filtered_df = df[df["Result"] == "Pass"]
+        filtered_df = df[
+            df["Result"] == "Pass"
+        ]
 
     elif result_filter == "Fail":
 
-        filtered_df = df[df["Result"] == "Fail"]
+        filtered_df = df[
+            df["Result"] == "Fail"
+        ]
 
     else:
 
         filtered_df = df
+
+
+    # ==========================================
+    # Get Sorting Values
+    # ==========================================
+
+    sort_by = request.form["sort_by"]
+
+    sort_order = request.form["sort_order"]
+
+
+    # ==========================================
+    # Determine Sorting Order
+    # ==========================================
+
+    if sort_order == "ascending":
+
+        ascending = True
+
+    else:
+
+        ascending = False
+
+
+    # ==========================================
+    # Apply Sorting
+    # ==========================================
+
+    filtered_df = filtered_df.sort_values(
+        by=sort_by,
+        ascending=ascending
+    )
 
 
     # ==========================================
@@ -323,7 +358,7 @@ def filter_students():
 
 
     # ==========================================
-    # Convert Filtered Data for Jinja
+    # Convert Filtered and Sorted Data for Jinja
     # ==========================================
 
     student_records = filtered_df.to_dict(
@@ -337,11 +372,15 @@ def filter_students():
 
     return render_template(
         "dashboard.html",
-        message=f"Showing {result_filter} students.",
+        message=(
+            f"Showing {result_filter} students "
+            f"sorted by {sort_by}."
+        ),
         overall_statistics=overall_statistics,
         subject_statistics=subject_statistics,
         student_records=student_records
     )
+
 
 # =====================================================
 # Run Application

@@ -172,7 +172,7 @@
 
 
         <!-- ===================================== -->
-        <!-- Student Records Filter -->
+        <!-- Student Records Filter and Sort -->
         <!-- ===================================== -->
 
         {% if student_records %}
@@ -182,11 +182,12 @@
             <div class="section-heading">
 
                 <h2>
-                    Filter Student Records
+                    Filter & Sort Student Records
                 </h2>
 
                 <p>
-                    Filter students based on their academic result.
+                    Filter students by result and sort their academic
+                    performance.
                 </p>
 
             </div>
@@ -197,6 +198,9 @@
                 action="{{ url_for('filter_students') }}"
                 class="student-filter-form"
             >
+
+
+                <!-- Result Filter -->
 
                 <div class="filter-input-container">
 
@@ -226,11 +230,80 @@
                 </div>
 
 
+
+                <!-- Sort By -->
+
+                <div class="filter-input-container">
+
+                    <label for="sort_by">
+                        Sort By
+                    </label>
+
+                    <select
+                        id="sort_by"
+                        name="sort_by"
+                    >
+
+                        <option value="Total">
+                            Total Marks
+                        </option>
+
+                        <option value="Average">
+                            Average Marks
+                        </option>
+
+                        <option value="Math">
+                            Math Marks
+                        </option>
+
+                        <option value="Science">
+                            Science Marks
+                        </option>
+
+                        <option value="English">
+                            English Marks
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- Sort Order -->
+
+                <div class="filter-input-container">
+
+                    <label for="sort_order">
+                        Order
+                    </label>
+
+                    <select
+                        id="sort_order"
+                        name="sort_order"
+                    >
+
+                        <option value="descending">
+                            Highest → Lowest
+                        </option>
+
+                        <option value="ascending">
+                            Lowest → Highest
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- Submit Button -->
+
                 <button
                     type="submit"
                     class="filter-button"
                 >
-                    Apply Filter
+                    Apply Filter & Sort
                 </button>
 
             </form>
@@ -400,9 +473,7 @@
             <div class="chart-grid">
 
 
-                <!-- ===================================== -->
                 <!-- Subject Average Marks Chart -->
-                <!-- ===================================== -->
 
                 <div class="chart-card">
 
@@ -420,9 +491,7 @@
 
 
 
-                <!-- ===================================== -->
                 <!-- Pass vs Fail Distribution -->
-                <!-- ===================================== -->
 
                 <div class="chart-card">
 
@@ -440,9 +509,7 @@
 
 
 
-                <!-- ===================================== -->
                 <!-- Marks Distribution Histogram -->
-                <!-- ===================================== -->
 
                 <div class="chart-card full-width">
 
