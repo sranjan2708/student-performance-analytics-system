@@ -105,6 +105,15 @@ def home():
 
 
     # ==========================================
+    # Convert Student Data for Jinja
+    # ==========================================
+
+    student_records = df.to_dict(
+        orient="records"
+    )
+
+
+    # ==========================================
     # Generate Charts
     # ==========================================
 
@@ -123,7 +132,8 @@ def home():
         "dashboard.html",
         message=f"{uploaded_file.filename} uploaded successfully!",
         overall_statistics=overall_statistics,
-        subject_statistics=subject_statistics
+        subject_statistics=subject_statistics,
+        student_records=student_records
     )
 
 
@@ -177,6 +187,24 @@ def search_student():
 
 
     # ==========================================
+    # Calculate Dashboard Statistics
+    # ==========================================
+
+    overall_statistics = calculate_overall_statistics(df)
+
+    subject_statistics = calculate_subject_statistics(df)
+
+
+    # ==========================================
+    # Convert Student Data for Jinja
+    # ==========================================
+
+    student_records = df.to_dict(
+        orient="records"
+    )
+
+
+    # ==========================================
     # Search Student
     # ==========================================
 
@@ -193,7 +221,11 @@ def search_student():
 
         return render_template(
             "dashboard.html",
-            message=f"No student found with the name '{search_name}'."
+            message=f"No student found with the name '{search_name}'.",
+            message_type="error",
+            overall_statistics=overall_statistics,
+            subject_statistics=subject_statistics,
+            student_records=student_records
         )
 
 
@@ -219,4 +251,5 @@ def search_student():
 # =====================================================
 
 if __name__ == "__main__":
+
     app.run(debug=True)

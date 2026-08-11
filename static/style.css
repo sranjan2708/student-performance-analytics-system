@@ -1553,3 +1553,40 @@ table tbody tr{
     }
 
 }
+
+
+/* ===================================================== */
+/* Message Types */
+/* ===================================================== */
+
+.message-box.success {
+
+    background: #d4edda;
+
+    color: #155724;
+
+    border-left: 6px solid #28a745;
+
+}
+
+
+.message-box.error {
+
+    background: #f8d7da;
+
+    color: #721c24;
+
+    border-left: 6px solid #dc3545;
+
+}
+
+
+.message-box.warning {
+
+    background: #fff3cd;
+
+    color: #856404;
+
+    border-left: 6px solid #ffc107;
+
+}

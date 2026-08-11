@@ -102,7 +102,7 @@
 
         <section class="message-section">
 
-            <div class="message-box">
+            <div class="message-box {{ message_type | default('success') }}">
 
                 {{ message }}
 
@@ -467,6 +467,98 @@
 
                             <td>
                                 {{ stats.lowest }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+
+        <!-- ===================================== -->
+        <!-- Student Records -->
+        <!-- ===================================== -->
+
+        {% if student_records %}
+
+        <section class="table-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Student Records
+                </h2>
+
+                <p>
+                    Complete academic records of all students.
+                </p>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Name</th>
+                            <th>Math</th>
+                            <th>Science</th>
+                            <th>English</th>
+                            <th>Total</th>
+                            <th>Average</th>
+                            <th>Result</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for student in student_records %}
+
+                        <tr>
+
+                            <td>
+                                {{ student.Name }}
+                            </td>
+
+                            <td>
+                                {{ student.Math }}
+                            </td>
+
+                            <td>
+                                {{ student.Science }}
+                            </td>
+
+                            <td>
+                                {{ student.English }}
+                            </td>
+
+                            <td>
+                                {{ student.Total }}
+                            </td>
+
+                            <td>
+                                {{ student.Average }}
+                            </td>
+
+                            <td>
+                                {{ student.Result }}
                             </td>
 
                         </tr>
