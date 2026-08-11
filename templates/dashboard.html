@@ -172,6 +172,76 @@
 
 
         <!-- ===================================== -->
+        <!-- Student Records Filter -->
+        <!-- ===================================== -->
+
+        {% if student_records %}
+
+        <section class="student-filter-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Filter Student Records
+                </h2>
+
+                <p>
+                    Filter students based on their academic result.
+                </p>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('filter_students') }}"
+                class="student-filter-form"
+            >
+
+                <div class="filter-input-container">
+
+                    <label for="result_filter">
+                        Result
+                    </label>
+
+                    <select
+                        id="result_filter"
+                        name="result_filter"
+                    >
+
+                        <option value="All">
+                            All Students
+                        </option>
+
+                        <option value="Pass">
+                            Pass Students
+                        </option>
+
+                        <option value="Fail">
+                            Fail Students
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="filter-button"
+                >
+                    Apply Filter
+                </button>
+
+            </form>
+
+        </section>
+
+        {% endif %}
+
+
+
+        <!-- ===================================== -->
         <!-- Overall Statistics -->
         <!-- ===================================== -->
 
@@ -514,13 +584,33 @@
 
                         <tr>
 
-                            <th>Name</th>
-                            <th>Math</th>
-                            <th>Science</th>
-                            <th>English</th>
-                            <th>Total</th>
-                            <th>Average</th>
-                            <th>Result</th>
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Math
+                            </th>
+
+                            <th>
+                                Science
+                            </th>
+
+                            <th>
+                                English
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Average
+                            </th>
+
+                            <th>
+                                Result
+                            </th>
 
                         </tr>
 

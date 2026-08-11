@@ -246,6 +246,103 @@ def search_student():
     )
 
 
+
+# =====================================================
+# Student Filter Route
+# =====================================================
+
+@app.route("/filter", methods=["POST"])
+def filter_students():
+
+    # ==========================================
+    # Get Saved File Path
+    # ==========================================
+
+    file_path = session.get("file_path")
+
+
+    # ==========================================
+    # Check Whether File Exists
+    # ==========================================
+
+    if not file_path or not os.path.exists(file_path):
+
+        return render_template(
+            "index.html",
+            message="Please upload a CSV file first."
+        )
+
+
+    # ==========================================
+    # Read Saved CSV
+    # ==========================================
+
+    try:
+
+        df = pd.read_csv(file_path)
+
+    except Exception:
+
+        return render_template(
+            "index.html",
+            message="Unable to read the saved CSV file."
+        )
+
+
+    # ==========================================
+    # Get Filter Value
+    # ==========================================
+
+    result_filter = request.form["result_filter"]
+
+
+    # ==========================================
+    # Apply Filter
+    # ==========================================
+
+    if result_filter == "Pass":
+
+        filtered_df = df[df["Result"] == "Pass"]
+
+    elif result_filter == "Fail":
+
+        filtered_df = df[df["Result"] == "Fail"]
+
+    else:
+
+        filtered_df = df
+
+
+    # ==========================================
+    # Calculate Dashboard Statistics
+    # ==========================================
+
+    overall_statistics = calculate_overall_statistics(df)
+
+    subject_statistics = calculate_subject_statistics(df)
+
+
+    # ==========================================
+    # Convert Filtered Data for Jinja
+    # ==========================================
+
+    student_records = filtered_df.to_dict(
+        orient="records"
+    )
+
+
+    # ==========================================
+    # Render Dashboard
+    # ==========================================
+
+    return render_template(
+        "dashboard.html",
+        message=f"Showing {result_filter} students.",
+        overall_statistics=overall_statistics,
+        subject_statistics=subject_statistics,
+        student_records=student_records
+    )
+
 # =====================================================
 # Run Application
 # =====================================================

@@ -1180,6 +1180,109 @@ table tbody tr{
 }
 
 
+
+
+/* ===================================================== */
+/* Student Records Filter */
+/* ===================================================== */
+
+.student-filter-section {
+    background: white;
+    padding: 30px;
+    margin: 30px 0;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.student-filter-section .section-heading {
+    margin-bottom: 20px;
+}
+
+.student-filter-section .section-heading h2 {
+    margin-bottom: 8px;
+}
+
+.student-filter-section .section-heading p {
+    color: #666;
+}
+
+.student-filter-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+.filter-input-container {
+    flex: 1;
+}
+
+.filter-input-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #1f4e79;
+}
+
+.filter-input-container select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d5dce5;
+    border-radius: 8px;
+    background: white;
+    color: #2d3436;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+}
+
+.filter-input-container select:focus {
+    border-color: #1f4e79;
+}
+
+.filter-button {
+    padding: 14px 25px;
+    border: none;
+    border-radius: 8px;
+    background: #1f4e79;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.filter-button:hover {
+    background: #163b5c;
+}
+
+/* ===================================================== */
+/* Student Records Filter Responsive Design */
+/* ===================================================== */
+
+@media (max-width: 900px) {
+
+    .student-filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-button {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .student-filter-section {
+        padding: 25px;
+    }
+
+}
+
+
 /* ===================================================== */
 /* Student Details Page */
 /* ===================================================== */
