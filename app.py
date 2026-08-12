@@ -14,6 +14,8 @@ from analytics import (
     calculate_subject_statistics
 )
 
+from validation import validate_student_data
+
 app = Flask(__name__)
 
 app.secret_key = "student-performance-secret"
@@ -95,7 +97,20 @@ def home():
             message="Unable to read the CSV file. Please upload a valid CSV."
         )
 
+    # ==========================================
+    # Validate Student Dataset
+    # ==========================================
 
+    is_valid, validation_message = validate_student_data(df)
+
+    if not is_valid:
+
+        return render_template(
+            "index.html",
+            message = validation_message
+        )
+
+    
     # ==========================================
     # Calculate Analytics
     # ==========================================
