@@ -306,6 +306,28 @@
                     Apply Filter & Sort
                 </button>
 
+
+                <!-- Export CSV Button -->
+
+                <button
+                    type="submit"
+                    class="filter-button"
+                    formaction="{{ url_for('export_csv') }}"
+                >
+                    Export CSV
+                </button>
+
+
+                <!-- Generate PDF Button -->
+
+                <button
+                    type="submit"
+                    class="filter-button"
+                    formaction="{{ url_for('generate_pdf') }}"
+                >
+                    Generate PDF Report
+                </button>
+
             </form>
 
         </section>
@@ -487,6 +509,14 @@
                         class="chart"
                     >
 
+                    <a
+                        href="{{ url_for('static', filename='chart.png') }}"
+                        download="subject_average_marks.png"
+                        class="filter-button chart-download-button"
+                    >
+                        Download Chart
+                    </a>
+
                 </div>
 
 
@@ -505,6 +535,14 @@
                         class="chart"
                     >
 
+                    <a
+                        href="{{ url_for('static', filename='pass_fail_chart.png') }}"
+                        download="pass_fail_distribution.png"
+                        class="filter-button chart-download-button"
+                    >
+                        Download Chart
+                    </a>
+
                 </div>
 
 
@@ -522,6 +560,14 @@
                         alt="Marks Distribution Histogram"
                         class="chart"
                     >
+
+                    <a
+                        href="{{ url_for('static', filename='marks_histogram.png') }}"
+                        download="marks_distribution_histogram.png"
+                        class="filter-button chart-download-button"
+                    >
+                        Download Chart
+                    </a>
 
                 </div>
 

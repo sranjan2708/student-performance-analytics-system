@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, send_file
 import pandas as pd
 import os
+from pdf_report import create_pdf_report
 
 from charts import (
     create_subject_bar_chart,
@@ -380,6 +381,287 @@ def filter_students():
         subject_statistics=subject_statistics,
         student_records=student_records
     )
+
+
+# =====================================================
+# Export Student Records as CSV
+# =====================================================
+
+@app.route("/export", methods=["POST"])
+def export_csv():
+
+    # ==========================================
+    # Get Saved File Path
+    # ==========================================
+
+    file_path = session.get("file_path")
+
+
+    # ==========================================
+    # Check Whether File Exists
+    # ==========================================
+
+    if not file_path or not os.path.exists(file_path):
+
+        return render_template(
+            "index.html",
+            message="Please upload a CSV file first."
+        )
+
+
+    # ==========================================
+    # Read Saved CSV
+    # ==========================================
+
+    try:
+
+        df = pd.read_csv(file_path)
+
+    except Exception:
+
+        return render_template(
+            "index.html",
+            message="Unable to read the saved CSV file."
+        )
+
+
+    # ==========================================
+    # Get Filter and Sort Values
+    # ==========================================
+
+    result_filter = request.form["result_filter"]
+
+    sort_by = request.form["sort_by"]
+
+    sort_order = request.form["sort_order"]
+
+
+    # ==========================================
+    # Apply Filter
+    # ==========================================
+
+    if result_filter == "Pass":
+
+        filtered_df = df[
+            df["Result"] == "Pass"
+        ]
+
+    elif result_filter == "Fail":
+
+        filtered_df = df[
+            df["Result"] == "Fail"
+        ]
+
+    else:
+
+        filtered_df = df
+
+
+    # ==========================================
+    # Determine Sort Order
+    # ==========================================
+
+    if sort_order == "ascending":
+
+        ascending = True
+
+    else:
+
+        ascending = False
+
+
+    # ==========================================
+    # Apply Sorting
+    # ==========================================
+
+    filtered_df = filtered_df.sort_values(
+        by=sort_by,
+        ascending=ascending
+    )
+
+
+    # ==========================================
+    # Export CSV
+    # ==========================================
+
+    from io import BytesIO
+
+    output = BytesIO()
+
+    filtered_df.to_csv(
+        output,
+        index=False
+    )
+
+    output.seek(0)
+
+
+    # ==========================================
+    # Send CSV File
+    # ==========================================
+
+    return send_file(
+        output,
+        mimetype="text/csv",
+        as_attachment=True,
+        download_name="student_performance_report.csv"
+    )
+
+
+
+# =====================================================
+# Generate Filtered and Sorted PDF Report
+# =====================================================
+
+@app.route("/generate-pdf", methods=["POST"])
+def generate_pdf():
+
+    # ==========================================
+    # Get Saved File Path
+    # ==========================================
+
+    file_path = session.get("file_path")
+
+
+    # ==========================================
+    # Check Whether File Exists
+    # ==========================================
+
+    if not file_path or not os.path.exists(file_path):
+
+        return render_template(
+            "index.html",
+            message="Please upload a CSV file first."
+        )
+
+
+    # ==========================================
+    # Read Saved CSV
+    # ==========================================
+
+    try:
+
+        df = pd.read_csv(file_path)
+
+    except Exception:
+
+        return render_template(
+            "index.html",
+            message="Unable to read the saved CSV file."
+        )
+
+
+    # ==========================================
+    # Get Filter and Sort Values
+    # ==========================================
+
+    result_filter = request.form["result_filter"]
+
+    sort_by = request.form["sort_by"]
+
+    sort_order = request.form["sort_order"]
+
+
+    # ==========================================
+    # Apply Filter
+    # ==========================================
+
+    if result_filter == "Pass":
+
+        filtered_df = df[
+            df["Result"] == "Pass"
+        ]
+
+    elif result_filter == "Fail":
+
+        filtered_df = df[
+            df["Result"] == "Fail"
+        ]
+
+    else:
+
+        filtered_df = df
+
+
+    # ==========================================
+    # Determine Sorting Order
+    # ==========================================
+
+    if sort_order == "ascending":
+
+        ascending = True
+
+    else:
+
+        ascending = False
+
+
+    # ==========================================
+    # Apply Sorting
+    # ==========================================
+
+    filtered_df = filtered_df.sort_values(
+        by=sort_by,
+        ascending=ascending
+    )
+
+
+    # ==========================================
+    # Calculate Statistics
+    # For Selected Filtered Data
+    # ==========================================
+
+    overall_statistics = calculate_overall_statistics(
+        filtered_df
+    )
+
+    subject_statistics = calculate_subject_statistics(
+        filtered_df
+    )
+
+
+    # ==========================================
+    # Convert Filtered and Sorted Data
+    # ==========================================
+
+    student_records = filtered_df.to_dict(
+        orient="records"
+    )
+
+
+    # ==========================================
+    # PDF File Path
+    # ==========================================
+
+    pdf_path = os.path.join(
+        "uploads",
+        "student_performance_report.pdf"
+    )
+
+
+    # ==========================================
+    # Create PDF
+    # ==========================================
+
+    create_pdf_report(
+        pdf_path,
+        overall_statistics,
+        subject_statistics,
+        student_records
+    )
+
+
+    # ==========================================
+    # Send PDF to User
+    # ==========================================
+
+    return send_file(
+        pdf_path,
+        mimetype="application/pdf",
+        as_attachment=True,
+        download_name="student_performance_report.pdf"
+    )
+
 
 
 # =====================================================
