@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, session, send_file
+from flask import Flask, render_template, request, session, send_file, redirect
 import pandas as pd
 import os
 from pdf_report import create_pdf_report
+from datetime import datetime
 
 from charts import (
     create_subject_bar_chart,
@@ -16,9 +17,19 @@ from analytics import (
 
 from validation import validate_student_data
 
+from database import (
+    create_reports_table,
+    insert_report,
+    get_all_reports,
+    get_report_by_id,
+    delete_report
+)
+
 app = Flask(__name__)
 
 app.secret_key = "student-performance-secret"
+
+create_reports_table()
 
 
 # =====================================================
@@ -119,6 +130,18 @@ def home():
 
     subject_statistics = calculate_subject_statistics(df)
 
+    insert_report(
+        uploaded_file.filename,
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        int(overall_statistics["total_students"]),
+        float(overall_statistics["overall_average"]),
+        int(overall_statistics["highest_total"]),
+        int(overall_statistics["lowest_total"]),
+        int(overall_statistics["pass_count"]),
+        int(overall_statistics["fail_count"]),
+        overall_statistics["topper"]
+    )
+
 
     # ==========================================
     # Convert Student Data for Jinja
@@ -151,6 +174,43 @@ def home():
         subject_statistics=subject_statistics,
         student_records=student_records
     )
+
+
+@app.route("/history")
+def report_history():
+
+    reports = get_all_reports()
+
+    return render_template(
+        "history.html",
+        reports=reports
+    )
+
+@app.route("/history/<int:report_id>")
+def view_report(report_id):
+
+    report = get_report_by_id(report_id)
+
+    if report is None:
+
+        return render_template(
+            "history.html",
+            reports=get_all_reports(),
+            message="Report not found."
+        )
+
+    return render_template(
+        "report_details.html",
+        report=report
+    )
+
+
+@app.route("/history/delete/<int:report_id>", methods=["POST"])
+def remove_report(report_id):
+
+    delete_report(report_id)
+
+    return redirect("/history")
 
 
 # =====================================================

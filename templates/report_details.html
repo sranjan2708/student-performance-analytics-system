@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report Details</title>
+
+</head>
+
+
+<body>
+
+    <h1>Report Details</h1>
+
+
+    <p>
+        <strong>Report ID:</strong>
+        {{ report["id"] }}
+    </p>
+
+    <p>
+        <strong>Filename:</strong>
+        {{ report["filename"] }}
+    </p>
+
+    <p>
+        <strong>Upload Date:</strong>
+        {{ report["upload_date"] }}
+    </p>
+
+    <p>
+        <strong>Total Students:</strong>
+        {{ report["total_students"] }}
+    </p>
+
+    <p>
+        <strong>Average Marks:</strong>
+        {{ report["average_marks"] }}
+    </p>
+
+    <p>
+        <strong>Highest Marks:</strong>
+        {{ report["highest_marks"] }}
+    </p>
+
+    <p>
+        <strong>Lowest Marks:</strong>
+        {{ report["lowest_marks"] }}
+    </p>
+
+    <p>
+        <strong>Pass Count:</strong>
+        {{ report["pass_count"] }}
+    </p>
+
+    <p>
+        <strong>Fail Count:</strong>
+        {{ report["fail_count"] }}
+    </p>
+
+    <p>
+        <strong>Topper:</strong>
+        {{ report["topper"] }}
+    </p>
+
+
+    <br>
+
+    <a href="/history">Back to Report History</a>
+
+</body>
+
+</html>

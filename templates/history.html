@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report History</title>
+
+</head>
+
+
+<body>
+
+    <h1>Report History</h1>
+
+
+    {% if message %}
+
+        <p>{{ message }}</p>
+
+    {% endif %}
+
+
+    {% if reports %}
+
+        <table border="1">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Filename</th>
+
+                    <th>Upload Date</th>
+
+                    <th>Total Students</th>
+
+                    <th>Average Marks</th>
+
+                    <th>Highest Marks</th>
+
+                    <th>Lowest Marks</th>
+
+                    <th>Pass Count</th>
+
+                    <th>Fail Count</th>
+
+                    <th>Topper</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for report in reports %}
+
+                    <tr>
+
+                        <td>{{ report["id"] }}</td>
+
+                        <td>{{ report["filename"] }}</td>
+
+                        <td>{{ report["upload_date"] }}</td>
+
+                        <td>{{ report["total_students"] }}</td>
+
+                        <td>{{ report["average_marks"] }}</td>
+
+                        <td>{{ report["highest_marks"] }}</td>
+
+                        <td>{{ report["lowest_marks"] }}</td>
+
+                        <td>{{ report["pass_count"] }}</td>
+
+                        <td>{{ report["fail_count"] }}</td>
+
+                        <td>{{ report["topper"] }}</td>
+
+                        <td>
+
+                            <a href="/history/{{ report['id'] }}">
+                                View
+                            </a>
+
+                            <form
+                                action="/history/delete/{{ report['id'] }}"
+                                method="POST"
+                                style="display: inline;"
+                            >
+
+                                <button type="submit">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    {% else %}
+
+        <p>No reports available.</p>
+
+    {% endif %}
+
+
+</body>
+
+</html>
