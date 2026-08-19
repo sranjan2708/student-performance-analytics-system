@@ -5,72 +5,430 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Report Details</title>
+    <title>
+        Report Details | Student Analytics System
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+
+        /* ========================================= */
+        /* Report Details Page */
+        /* ========================================= */
+
+        .report-details-container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 55px auto 80px;
+        }
+
+
+        .report-details-header {
+            margin-bottom: 30px;
+        }
+
+
+        .report-details-header h2 {
+            margin-bottom: 8px;
+        }
+
+
+        .report-details-header p {
+            margin: 0;
+        }
+
+
+        /* ========================================= */
+        /* Report Information */
+        /* ========================================= */
+
+        .report-details-card {
+            background: white;
+            padding: 35px 40px;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .report-detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            padding: 17px 0;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+
+        .report-detail-row:last-child {
+            border-bottom: none;
+        }
+
+
+        .report-detail-label {
+            font-weight: 700;
+            color: #536273;
+        }
+
+
+        .report-detail-value {
+            color: #1f527f;
+            font-weight: 600;
+            text-align: right;
+            word-break: break-word;
+        }
+
+
+        /* ========================================= */
+        /* Navigation Actions */
+        /* ========================================= */
+
+        .report-details-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+
+        .report-details-button {
+            display: inline-block;
+            padding: 13px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
+
+
+        .report-details-button.primary {
+            background: #245985;
+            color: white;
+        }
+
+
+        .report-details-button.secondary {
+            border: 2px solid #245985;
+            color: #245985;
+            background: white;
+        }
+
+
+        .report-details-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.92;
+        }
+
+
+        @media (max-width: 700px) {
+
+            .report-details-container {
+                width: 94%;
+            }
+
+
+            .report-details-card {
+                padding: 25px 22px;
+            }
+
+
+            .report-detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+
+            .report-detail-value {
+                text-align: left;
+            }
+
+
+            .report-details-actions {
+                flex-direction: column;
+            }
+
+
+            .report-details-button {
+                text-align: center;
+            }
+
+        }
+
+    </style>
 
 </head>
 
 
 <body>
 
-    <h1>Report Details</h1>
+
+    <!-- ========================================= -->
+    <!-- Navigation Bar -->
+    <!-- ========================================= -->
+
+    <header class="navbar">
+
+        <div class="nav-container">
+
+            <div class="logo">
+
+                <h1>
+                    Student Performance Analytics System
+                </h1>
+
+            </div>
 
 
-    <p>
-        <strong>Report ID:</strong>
-        {{ report["id"] }}
-    </p>
+            <nav>
 
-    <p>
-        <strong>Filename:</strong>
-        {{ report["filename"] }}
-    </p>
+                <ul class="nav-links">
 
-    <p>
-        <strong>Upload Date:</strong>
-        {{ report["upload_date"] }}
-    </p>
+                    <li>
 
-    <p>
-        <strong>Total Students:</strong>
-        {{ report["total_students"] }}
-    </p>
+                        <a href="{{ url_for('home') }}">
+                            Upload New Report
+                        </a>
 
-    <p>
-        <strong>Average Marks:</strong>
-        {{ report["average_marks"] }}
-    </p>
+                    </li>
 
-    <p>
-        <strong>Highest Marks:</strong>
-        {{ report["highest_marks"] }}
-    </p>
+                    <li>
 
-    <p>
-        <strong>Lowest Marks:</strong>
-        {{ report["lowest_marks"] }}
-    </p>
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
+                        </a>
 
-    <p>
-        <strong>Pass Count:</strong>
-        {{ report["pass_count"] }}
-    </p>
+                    </li>
 
-    <p>
-        <strong>Fail Count:</strong>
-        {{ report["fail_count"] }}
-    </p>
+                </ul>
 
-    <p>
-        <strong>Topper:</strong>
-        {{ report["topper"] }}
-    </p>
+            </nav>
+
+        </div>
+
+    </header>
 
 
-    <br>
+    <!-- ========================================= -->
+    <!-- Main Report Details -->
+    <!-- ========================================= -->
 
-    <a href="/history">Back to Report History</a>
+    <main class="report-details-container">
+
+
+        <!-- ========================================= -->
+        <!-- Page Header -->
+        <!-- ========================================= -->
+
+        <section class="report-details-header">
+
+            <h2>
+                Report Details
+            </h2>
+
+            <p>
+                Detailed information about the selected student performance report.
+            </p>
+
+        </section>
+
+
+        <!-- ========================================= -->
+        <!-- Report Information -->
+        <!-- ========================================= -->
+
+        <section class="report-details-card">
+
+
+            <div class="report-detail-row">
+
+                <span class="report-detail-label">
+                    Report ID
+                </span>
+
+                <span class="report-detail-value">
+                    {{ report["id"] }}
+                </span>
+
+            </div>
+
+
+            <div class="report-detail-row">
+
+                <span class="report-detail-label">
+                    Filename
+                </span>
+
+                <span class="report-detail-value">
+                    {{ report["filename"] }}
+                </span>
+
+            </div>
+
+
+            <div class="report-detail-row">
+
+                <span class="report-detail-label">
+                    Upload Date
+                </span>
+
+                <span class="report-detail-value">
+                    {{ report["upload_date"] }}
+                </span>
+
+            </div>
+
+
+            <div class="report-detail-row">
+
+                <span class="report-detail-label">
+                    Total Students
+                </span>
+
+                <span class="report-detail-value">
+                    {{ report["total_students"] }}
+                </span>
+
+            </div>
+
+
+            <div class="report-detail-row">
+
+                <span class="report-detail-label">
+                    Average Marks
+                </span>
+
+                <span class="report-detail-value">
+                    {{ report["average_marks"] }}
+                </span>
+
+            </div>
+
+
+            <div class="report-detail-row">
+
+                <span class="report-detail-label">
+                    Highest Marks
+                </span>
+
+                <span class="report-detail-value">
+                    {{ report["highest_marks"] }}
+                </span>
+
+            </div>
+
+
+            <div class="report-detail-row">
+
+                <span class="report-detail-label">
+                    Lowest Marks
+                </span>
+
+                <span class="report-detail-value">
+                    {{ report["lowest_marks"] }}
+                </span>
+
+            </div>
+
+
+            <div class="report-detail-row">
+
+                <span class="report-detail-label">
+                    Pass Count
+                </span>
+
+                <span class="report-detail-value">
+                    {{ report["pass_count"] }}
+                </span>
+
+            </div>
+
+
+            <div class="report-detail-row">
+
+                <span class="report-detail-label">
+                    Fail Count
+                </span>
+
+                <span class="report-detail-value">
+                    {{ report["fail_count"] }}
+                </span>
+
+            </div>
+
+
+            <div class="report-detail-row">
+
+                <span class="report-detail-label">
+                    Topper
+                </span>
+
+                <span class="report-detail-value">
+                    {{ report["topper"] }}
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ========================================= -->
+        <!-- Navigation Actions -->
+        <!-- ========================================= -->
+
+        <div class="report-details-actions">
+
+            <a
+                href="{{ url_for('report_history') }}"
+                class="report-details-button secondary"
+            >
+                Back to Report History
+            </a>
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="report-details-button primary"
+            >
+                Back to Dashboard
+            </a>
+
+        </div>
+
+
+    </main>
+
+
+    <!-- ========================================= -->
+    <!-- Footer -->
+    <!-- ========================================= -->
+
+    <footer>
+
+        <div class="footer-container">
+
+            <p>
+                Student Performance Analytics System
+            </p>
+
+            <p>
+                Built using Flask, Pandas, Matplotlib and Jinja2
+            </p>
+
+        </div>
+
+    </footer>
+
 
 </body>
 

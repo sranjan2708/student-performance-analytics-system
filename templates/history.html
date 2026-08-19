@@ -5,119 +5,446 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Report History</title>
+    <title>
+        Report History | Student Analytics System
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+
+        .history-page-container {
+            width: 92%;
+            max-width: 1500px;
+            margin: 50px auto 80px;
+        }
+
+        .history-page-header {
+            margin-bottom: 30px;
+        }
+
+        .history-page-header h2 {
+            margin-bottom: 8px;
+        }
+
+        .history-page-header p {
+            margin: 0;
+        }
+
+        .history-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .history-nav-button {
+            display: inline-block;
+            padding: 12px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
+
+        .history-nav-button.primary {
+            background: #245985;
+            color: white;
+        }
+
+        .history-nav-button.secondary {
+            border: 2px solid #245985;
+            color: #245985;
+            background: white;
+        }
+
+        .history-nav-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.92;
+        }
+
+        .history-message {
+            padding: 15px 18px;
+            margin-bottom: 25px;
+            border-left: 5px solid #245985;
+            border-radius: 8px;
+            background: #eef5fb;
+            color: #24415d;
+        }
+
+        .history-table-container {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        .history-table th {
+            background: #245985;
+            color: white;
+            padding: 15px 12px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .history-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e5eaf0;
+            white-space: nowrap;
+        }
+
+        .history-table tbody tr:hover {
+            background: #f6f9fc;
+        }
+
+        .history-row-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .view-report-button {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 6px;
+            background: #245985;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .view-report-button:hover {
+            opacity: 0.9;
+        }
+
+        .delete-report-button {
+            padding: 8px 14px;
+            border: 1px solid #c9363e;
+            border-radius: 6px;
+            background: white;
+            color: #c9363e;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .delete-report-button:hover {
+            background: #c9363e;
+            color: white;
+        }
+
+        .delete-report-form {
+            margin: 0;
+        }
+
+        .history-empty-state {
+            padding: 50px 20px;
+            text-align: center;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .history-empty-state h3 {
+            margin-bottom: 10px;
+        }
+
+    </style>
 
 </head>
 
 
 <body>
 
-    <h1>Report History</h1>
+
+    <!-- ========================================= -->
+    <!-- Navigation Bar -->
+    <!-- ========================================= -->
+
+    <header class="navbar">
+
+        <div class="nav-container">
+
+            <div class="logo">
+
+                <h1>
+                    Student Performance Analytics System
+                </h1>
+
+            </div>
 
 
-    {% if message %}
+            <nav>
 
-        <p>{{ message }}</p>
+                <ul class="nav-links">
 
-    {% endif %}
+                    <li>
 
+                        <a href="{{ url_for('home') }}">
+                            Upload New Report
+                        </a>
 
-    {% if reports %}
+                    </li>
 
-        <table border="1">
+                    <li>
 
-            <thead>
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
+                        </a>
 
-                <tr>
+                    </li>
 
-                    <th>ID</th>
+                </ul>
 
-                    <th>Filename</th>
+            </nav>
 
-                    <th>Upload Date</th>
+        </div>
 
-                    <th>Total Students</th>
-
-                    <th>Average Marks</th>
-
-                    <th>Highest Marks</th>
-
-                    <th>Lowest Marks</th>
-
-                    <th>Pass Count</th>
-
-                    <th>Fail Count</th>
-
-                    <th>Topper</th>
-
-                    <th>Action</th>
-
-                </tr>
-
-            </thead>
+    </header>
 
 
-            <tbody>
+    <!-- ========================================= -->
+    <!-- Main History Page -->
+    <!-- ========================================= -->
 
-                {% for report in reports %}
+    <main class="history-page-container">
 
-                    <tr>
 
-                        <td>{{ report["id"] }}</td>
+        <!-- ========================================= -->
+        <!-- Page Header -->
+        <!-- ========================================= -->
 
-                        <td>{{ report["filename"] }}</td>
+        <section class="history-page-header">
 
-                        <td>{{ report["upload_date"] }}</td>
+            <h2>
+                Report History
+            </h2>
 
-                        <td>{{ report["total_students"] }}</td>
+            <p>
+                View and manage previously generated student performance reports.
+            </p>
 
-                        <td>{{ report["average_marks"] }}</td>
+        </section>
 
-                        <td>{{ report["highest_marks"] }}</td>
 
-                        <td>{{ report["lowest_marks"] }}</td>
+        <!-- ========================================= -->
+        <!-- Navigation Actions -->
+        <!-- ========================================= -->
 
-                        <td>{{ report["pass_count"] }}</td>
+        <div class="history-actions">
 
-                        <td>{{ report["fail_count"] }}</td>
+            <a
+                href="{{ url_for('home') }}"
+                class="history-nav-button secondary"
+            >
+                Upload New Report
+            </a>
 
-                        <td>{{ report["topper"] }}</td>
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="history-nav-button primary"
+            >
+                Back to Dashboard
+            </a>
 
-                        <td>
+        </div>
 
-                            <a href="/history/{{ report['id'] }}">
-                                View
-                            </a>
 
-                            <form
-                                action="/history/delete/{{ report['id'] }}"
-                                method="POST"
-                                style="display: inline;"
-                            >
+        <!-- ========================================= -->
+        <!-- Message -->
+        <!-- ========================================= -->
 
-                                <button type="submit">
-                                    Delete
-                                </button>
+        {% if message %}
 
-                            </form>
+            <div class="history-message">
 
-                        </td>
+                {{ message }}
 
-                    </tr>
+            </div>
 
-                {% endfor %}
+        {% endif %}
 
-            </tbody>
 
-        </table>
+        <!-- ========================================= -->
+        <!-- Report Table -->
+        <!-- ========================================= -->
 
-    {% else %}
+        {% if reports %}
 
-        <p>No reports available.</p>
+            <div class="history-table-container">
 
-    {% endif %}
+                <table class="history-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Filename</th>
+
+                            <th>Upload Date</th>
+
+                            <th>Total Students</th>
+
+                            <th>Average Marks</th>
+
+                            <th>Highest Marks</th>
+
+                            <th>Lowest Marks</th>
+
+                            <th>Pass Count</th>
+
+                            <th>Fail Count</th>
+
+                            <th>Topper</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for report in reports %}
+
+                            <tr>
+
+                                <td>
+                                    {{ report["id"] }}
+                                </td>
+
+                                <td>
+                                    {{ report["filename"] }}
+                                </td>
+
+                                <td>
+                                    {{ report["upload_date"] }}
+                                </td>
+
+                                <td>
+                                    {{ report["total_students"] }}
+                                </td>
+
+                                <td>
+                                    {{ report["average_marks"] }}
+                                </td>
+
+                                <td>
+                                    {{ report["highest_marks"] }}
+                                </td>
+
+                                <td>
+                                    {{ report["lowest_marks"] }}
+                                </td>
+
+                                <td>
+                                    {{ report["pass_count"] }}
+                                </td>
+
+                                <td>
+                                    {{ report["fail_count"] }}
+                                </td>
+
+                                <td>
+                                    {{ report["topper"] }}
+                                </td>
+
+                                <td>
+
+                                    <div class="history-row-actions">
+
+                                        <a
+                                            href="{{ url_for('view_report', report_id=report['id']) }}"
+                                            class="view-report-button"
+                                        >
+                                            View
+                                        </a>
+
+
+                                        <form
+                                            action="{{ url_for('remove_report', report_id=report['id']) }}"
+                                            method="POST"
+                                            class="delete-report-form"
+                                        >
+
+                                            <button
+                                                type="submit"
+                                                class="delete-report-button"
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div class="history-empty-state">
+
+                <h3>
+                    No reports available
+                </h3>
+
+                <p>
+                    Upload a CSV file to generate your first performance report.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+    </main>
+
+
+    <!-- ========================================= -->
+    <!-- Footer -->
+    <!-- ========================================= -->
+
+    <footer>
+
+        <div class="footer-container">
+
+            <p>
+                Student Performance Analytics System
+            </p>
+
+            <p>
+                Built using Flask, Pandas, Matplotlib and Jinja2
+            </p>
+
+        </div>
+
+    </footer>
 
 
 </body>
