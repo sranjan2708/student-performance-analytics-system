@@ -6,25 +6,23 @@ A Flask-based web application for uploading student performance CSV files, perfo
 
 ## 📌 Overview
 
-The **Student Performance Analytics System** is designed to turn raw student performance data stored in CSV files into useful academic insights.
+The **Student Performance Analytics System** converts raw student performance data stored in CSV files into useful academic insights through a web-based dashboard.
 
-The application allows a user to:
+The application allows users to:
 
-- Upload a student performance CSV file
-- Validate the uploaded dataset
+- Upload student performance CSV files
+- Validate uploaded datasets
 - Calculate overall performance statistics
 - Analyze subject-wise performance dynamically
-- Visualize student performance using charts
+- Generate performance visualizations
 - Search for individual students
 - View detailed student performance reports
-- Store report history using SQLite
+- Maintain report history using SQLite
 - View previously generated reports
-- Export report data
+- Export analyzed data as CSV
 - Generate PDF performance reports
 - Handle invalid input and application errors
 - Maintain application logs
-
-The application is built using Flask, Pandas, SQLite, Matplotlib, Seaborn, and Jinja2.
 
 ---
 
@@ -32,14 +30,14 @@ The application is built using Flask, Pandas, SQLite, Matplotlib, Seaborn, and J
 
 Educational performance data is often stored as raw tabular data, making it difficult to quickly understand overall student performance or identify individual academic trends.
 
-This project provides a simple web-based analytics system that converts uploaded CSV data into:
+This project provides a web-based analytics system that converts uploaded CSV data into:
 
-- Overall statistics
+- Overall performance statistics
 - Subject-wise analysis
 - Performance visualizations
 - Individual student reports
 - Historical reports
-- Downloadable PDF and CSV outputs
+- Downloadable CSV and PDF outputs
 
 ---
 
@@ -52,8 +50,8 @@ Users can upload student performance datasets through the web interface.
 The application:
 
 1. Receives the uploaded CSV file
-2. Validates the file
-3. Saves the file
+2. Validates the dataset
+3. Saves the uploaded file
 4. Reads the dataset using Pandas
 5. Calculates analytics
 6. Displays the dashboard
@@ -62,23 +60,19 @@ The application:
 
 ### 2. Data Validation
 
-The project contains centralized validation functionality.
-
-Validation helps ensure that uploaded datasets contain the required structure and valid data before analytics are performed.
-
-The project includes:
+The project contains centralized validation functionality in:
 
 ```text
 validation.py
 ```
 
-This keeps validation logic separate from the main Flask application.
+Validation helps ensure that uploaded datasets have the required structure and valid data before analytics are performed.
 
 ---
 
 ### 3. Overall Performance Analytics
 
-The system calculates important statistics such as:
+The system calculates important academic statistics such as:
 
 - Total number of students
 - Average marks
@@ -88,17 +82,15 @@ The system calculates important statistics such as:
 - Fail count
 - Topper information
 
-These values are displayed on the dashboard.
+These statistics are displayed on the dashboard.
 
 ---
 
 ### 4. Dynamic Subject Analysis
 
-Subject information is derived from the uploaded dataset rather than permanently depending on a fixed list of subjects.
+Subject information is derived from the uploaded dataset rather than relying permanently on a fixed list of subjects.
 
-This allows the system to work with datasets containing different subjects.
-
-For example:
+This allows the system to work with datasets containing different subjects, such as:
 
 ```text
 Mathematics
@@ -115,13 +107,11 @@ Biology
 Economics
 ```
 
-The analytics system can work with the subjects present in the uploaded CSV.
-
 ---
 
 ### 5. Performance Visualization
 
-The project generates graphical representations of student performance.
+The project generates graphical representations of student performance using Matplotlib and Seaborn.
 
 Current visualizations include:
 
@@ -129,13 +119,11 @@ Current visualizations include:
 - Marks histogram
 - Pass/fail chart
 
-Chart generation is handled separately through:
+Chart-related functionality is implemented in:
 
 ```text
 charts.py
 ```
-
-The project also contains Seaborn practice/visualization work.
 
 ---
 
@@ -150,7 +138,7 @@ The system:
 3. Converts the matching record into a dictionary
 4. Displays an individual performance report
 
-The student report includes information such as:
+The student report includes:
 
 - Student name
 - Total marks
@@ -162,7 +150,7 @@ The student report includes information such as:
 
 ### 7. Dashboard
 
-The dashboard provides a central place for viewing the uploaded dataset and its analytics.
+The dashboard provides a central place for exploring the uploaded dataset and its analytics.
 
 It includes:
 
@@ -171,9 +159,10 @@ It includes:
 - Performance charts
 - Student records
 - Student search
-- Export functionality
-- PDF report generation
-- Navigation to report history
+- Filtering and sorting
+- CSV export
+- PDF generation
+- Report history navigation
 
 ---
 
@@ -181,19 +170,13 @@ It includes:
 
 The application uses SQLite to maintain report history.
 
-Database file:
-
-```text
-student_analytics.db
-```
-
-Database-related functionality is separated into:
+Database functionality is implemented in:
 
 ```text
 database.py
 ```
 
-The history system stores information such as:
+The database stores report-level information such as:
 
 - Report ID
 - Filename
@@ -212,48 +195,40 @@ Users can:
 - Open report details
 - Delete reports
 
+The SQLite database is generated locally at runtime and is intentionally excluded from Git.
+
 ---
 
 ### 9. PDF Report Generation
 
-The project supports generating a PDF report from the analyzed student data.
+The project supports generating PDF reports from analyzed student performance data.
 
-PDF functionality is handled through:
+PDF functionality is implemented in:
 
 ```text
 pdf_report.py
 ```
 
-Generated reports can be stored in the uploads directory.
-
-Example:
-
-```text
-uploads/student_performance_report.pdf
-```
+Generated PDF files are stored locally and are excluded from Git.
 
 ---
 
 ### 10. CSV Export
 
-The application provides export functionality so that analyzed student data can be downloaded as CSV output.
-
-This makes the analytics results reusable outside the application.
+The application provides CSV export functionality so that analyzed student records can be downloaded and reused outside the application.
 
 ---
 
 ### 11. Error Handling
 
-The application includes custom error pages for application errors.
-
-Current error templates include:
+The application includes dedicated error pages for common HTTP errors:
 
 ```text
-404.html
-500.html
+templates/404.html
+templates/500.html
 ```
 
-These provide a better user experience than displaying raw server errors.
+This provides a better user experience than exposing raw server errors.
 
 ---
 
@@ -261,47 +236,38 @@ These provide a better user experience than displaying raw server errors.
 
 Application activity is recorded using Python logging.
 
-Log file:
+Logs are stored locally in:
 
 ```text
-logs/app.log
+logs/
 ```
 
-The application records useful events such as:
-
-- Application startup
-- File upload
-- CSV reading
-- Analytics calculation
-- Request activity
-- Errors and warnings
-
-Logging helps with debugging and application monitoring.
+The logs directory is intentionally excluded from Git because log files are runtime-generated data.
 
 ---
 
 ### 13. Dashboard Navigation & UX
 
-The project includes navigation between:
+The application provides consistent navigation between the upload page, dashboard, student details, report history, and report details.
 
 ```text
-Upload
-   ↓
+Upload CSV
+    ↓
 Dashboard
-   ├── Student Search
-   │      ↓
-   │   Student Details
-   │      ↓
-   │   Dashboard
-   │
-   └── Report History
-          ↓
-      Report Details
-          ↓
-       Dashboard
+    ├── Search Student
+    │      ↓
+    │  Student Details
+    │      ↓
+    │  Dashboard
+    │
+    └── Report History
+           ↓
+       Report Details
+           ↓
+        Dashboard
 ```
 
-The dashboard session is preserved so that users do not have to repeatedly upload the same CSV file simply to search another student or navigate through reports.
+The application keeps the currently uploaded CSV path in the session so that users can continue working with the same dataset without repeatedly uploading it.
 
 ---
 
@@ -312,18 +278,18 @@ The dashboard session is preserved so that users do not have to repeatedly uploa
 | Python | Core programming language |
 | Flask | Web application framework |
 | Pandas | Data processing and analytics |
+| NumPy | Numerical operations |
 | SQLite | Report history database |
 | Matplotlib | Data visualization |
 | Seaborn | Statistical visualization |
-| Jinja2 | HTML templating |
+| ReportLab | PDF report generation |
+| Jinja2 | Server-side HTML templating |
 | HTML | Web page structure |
 | CSS | User interface styling |
 
 ---
 
 ## 🏗️ Project Architecture
-
-The application follows a modular structure where different responsibilities are separated into different Python files.
 
 ```text
                     ┌─────────────────────┐
@@ -342,8 +308,8 @@ The application follows a modular structure where different responsibilities are
        ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
        │   Pandas    │  │ Validation  │  │   SQLite    │
        │  Analytics  │  │ validation  │  │  Database   │
-       └─────────────┘  │    .py      │  │ database.py │
-                        └─────────────┘  └─────────────┘
+       │ analytics.py│  │    .py      │  │ database.py │
+       └─────────────┘  └─────────────┘  └─────────────┘
               │
               ▼
        ┌─────────────┐
@@ -373,16 +339,10 @@ Student Performance Analytics System/
 │
 ├── data/
 │
-├── logs/
-│   └── app.log
-│
 ├── practice/
 │   └── pandas_basic.py
 │
 ├── static/
-│   ├── chart.png
-│   ├── marks_histogram.png
-│   ├── pass_fail_chart.png
 │   └── style.css
 │
 ├── templates/
@@ -390,13 +350,15 @@ Student Performance Analytics System/
 │   ├── 500.html
 │   ├── dashboard.html
 │   ├── history.html
+│   ├── index.html
 │   ├── report_details.html
-│   ├── student.html
-│   └── ...
+│   └── student.html
 │
 ├── uploads/
-│   ├── *.csv
-│   └── *.pdf
+│   └── Runtime-generated uploads
+│
+├── logs/
+│   └── Runtime-generated logs
 │
 ├── analytics.py
 ├── app.py
@@ -404,14 +366,14 @@ Student Performance Analytics System/
 ├── database.py
 ├── pdf_report.py
 ├── practice.py
-├── requirements.txt
 ├── seaborn_basic.py
 ├── validation.py
-├── .gitignore
-└── student_analytics.db
+├── requirements.txt
+├── README.md
+└── .gitignore
 ```
 
-> `venv/`, `__pycache__/`, generated files, and other local runtime artifacts should be excluded from Git using `.gitignore` where appropriate.
+> Runtime-generated files such as uploaded CSV/PDF files, logs, SQLite databases, generated chart images, virtual environments, and Python cache files are excluded from Git using `.gitignore`.
 
 ---
 
@@ -454,7 +416,7 @@ Dashboard
  │
  ├── Search Student
  │
- ├── Filter Data
+ ├── Filter / Sort
  │
  ├── Export CSV
  │
@@ -467,7 +429,7 @@ Dashboard
 
 ## 📊 Analytics
 
-The analytics layer is implemented primarily through:
+Analytics functionality is implemented primarily through:
 
 ```text
 analytics.py
@@ -475,19 +437,13 @@ analytics.py
 
 The system processes uploaded student data and calculates meaningful academic statistics.
 
-The application separates analytics logic from Flask routing so that data-processing functionality is easier to maintain and reuse.
+The analytics logic is separated from Flask routing to keep data-processing responsibilities modular and maintainable.
 
 ---
 
 ## 🗄️ Database
 
 SQLite is used for persistent report history.
-
-Database:
-
-```text
-student_analytics.db
-```
 
 The database layer is implemented in:
 
@@ -497,7 +453,11 @@ database.py
 
 The database stores report-level information rather than replacing the uploaded CSV as the primary student dataset.
 
-This allows the application to maintain a history of generated reports.
+The local SQLite database is ignored by Git:
+
+```gitignore
+*.db
+```
 
 ---
 
@@ -511,13 +471,15 @@ Used for exporting analyzed student records.
 
 ### PDF
 
-Used for generating a formatted student performance report.
+Used for generating formatted performance reports.
 
-PDF generation is handled by:
+PDF generation is implemented in:
 
 ```text
 pdf_report.py
 ```
+
+Generated reports are runtime files and are excluded from Git.
 
 ---
 
@@ -529,26 +491,28 @@ The project uses centralized validation logic through:
 validation.py
 ```
 
-This improves consistency by keeping validation rules separate from the Flask routes.
+This keeps validation rules separate from Flask route handling.
 
-The application also provides dedicated error pages:
+The application also provides:
 
 ```text
 404.html
 500.html
 ```
 
+for dedicated error responses.
+
 ---
 
 ## 📝 Logging
 
-Logging is configured in the Flask application and writes application events to:
+Application logging is configured in Flask and writes runtime events to:
 
 ```text
 logs/app.log
 ```
 
-Example logged events include:
+Examples of logged events include:
 
 ```text
 Application started
@@ -557,7 +521,7 @@ CSV file read successfully
 Analytics calculated successfully
 ```
 
-Logging makes it easier to diagnose application behavior without relying only on terminal output.
+The `logs/` directory is excluded from Git.
 
 ---
 
@@ -566,20 +530,20 @@ Logging makes it easier to diagnose application behavior without relying only on
 ### 1. Clone the repository
 
 ```bash
-git clone <your-github-repository-url>
+git clone https://github.com/sranjan2708/student-performance-analytics-system.git
 ```
 
 ### 2. Open the project
 
 ```bash
-cd Student-Performance-Analytics-System
+cd student-performance-analytics-system
 ```
 
 ### 3. Create a virtual environment
 
 Windows:
 
-```bash
+```powershell
 python -m venv venv
 ```
 
@@ -587,13 +551,13 @@ python -m venv venv
 
 Windows PowerShell:
 
-```bash
+```powershell
 venv\Scripts\Activate.ps1
 ```
 
 ### 5. Install dependencies
 
-```bash
+```powershell
 pip install -r requirements.txt
 ```
 
@@ -603,7 +567,7 @@ pip install -r requirements.txt
 
 Start the Flask application:
 
-```bash
+```powershell
 python app.py
 ```
 
@@ -646,17 +610,17 @@ Open the student's detailed academic performance page.
 
 ### Step 6 — Export / Generate PDF
 
-Use the available reporting options to download the analyzed information.
+Use the available reporting options to download analyzed information.
 
 ### Step 7 — View Report History
 
-Open Report History to view previously generated report records.
+Open Report History to view previously generated reports.
 
 ---
 
 ## 📸 Screenshots
 
-Add project screenshots here when preparing the final GitHub repository.
+The GitHub repository can be enhanced with screenshots of the main application pages.
 
 Recommended screenshots:
 
@@ -670,7 +634,7 @@ Recommended screenshots:
 7. Generated PDF
 ```
 
-Example Markdown:
+Example:
 
 ```markdown
 ![Dashboard](screenshots/dashboard.png)
@@ -690,8 +654,8 @@ Possible future enhancements include:
 - REST API support
 - Improved responsive design
 - Pagination for large datasets
-- Advanced student performance prediction
-- Machine learning based performance forecasting
+- Machine learning based performance prediction
+- Advanced student performance forecasting
 
 ---
 
