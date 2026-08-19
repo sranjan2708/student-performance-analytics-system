@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from pdf_report import create_pdf_report
 from datetime import datetime
+import logging
 
 from charts import (
     create_subject_bar_chart,
@@ -25,7 +26,52 @@ from database import (
     delete_report
 )
 
+# =====================================================
+# Input Validation Rules
+# =====================================================
+
+ALLOWED_FILTERS = [
+    "All",
+    "Pass",
+    "Fail"
+]
+
+ALLOWED_SORT_COLUMNS = [
+    "Total",
+    "Average",
+    "Math",
+    "Science",
+    "English"
+]
+
+ALLOWED_SORT_ORDERS = [
+    "ascending",
+    "descending"
+]
+
+
+# =====================================================
+# Logging Configuration
+# =====================================================
+
+logger = logging.getLogger(__name__)
+
+logger.setLevel(logging.INFO)
+
+file_handler = logging.FileHandler(
+    "logs/app.log"
+)
+
+formatter = logging.Formatter(
+    "%(asctime)s - %(levelname)s - %(message)s"
+)
+
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+
 app = Flask(__name__)
+
 
 app.secret_key = "student-performance-secret"
 
@@ -52,14 +98,14 @@ def home():
     # POST Request
     # ==========================================
 
-    uploaded_file = request.files["marks"]
+    uploaded_file = request.files.get("marks")
 
 
     # ==========================================
     # Validation 1 : File Selected
     # ==========================================
 
-    if uploaded_file.filename == "":
+    if uploaded_file is None or uploaded_file.filename == "":
 
         return render_template(
             "index.html",
@@ -88,9 +134,29 @@ def home():
         uploaded_file.filename
     )
 
-    uploaded_file.save(file_path)
+    try:
+
+        uploaded_file.save(file_path)
+
+    except Exception as e:
+
+        logger.error(
+            "Failed to save uploaded file %s: %s",
+            uploaded_file.filename,
+            e
+        )
+
+        return render_template(
+            "index.html",
+            message = "Unable to save the uploaded file. Please try again."
+        )
 
     session["file_path"] = file_path
+
+    logger.info(
+        "File uploaded successfully: %s",
+        uploaded_file.filename
+    )
 
 
     # ==========================================
@@ -101,12 +167,23 @@ def home():
 
         df = pd.read_csv(file_path)
 
-    except Exception:
+    except Exception as e:
+
+        logger.error(
+            "Failed to read CSV file %s: %s",
+            uploaded_file.filename,
+            e
+        )
 
         return render_template(
             "index.html",
             message="Unable to read the CSV file. Please upload a valid CSV."
         )
+
+    logger.info(
+        "CSV file read successfully: %s",
+        uploaded_file.filename
+    )
 
     # ==========================================
     # Validate Student Dataset
@@ -115,6 +192,11 @@ def home():
     is_valid, validation_message = validate_student_data(df)
 
     if not is_valid:
+
+        logger.warning(
+            "Dataset validation failed: %s",
+            validation_message
+        )
 
         return render_template(
             "index.html",
@@ -126,9 +208,30 @@ def home():
     # Calculate Analytics
     # ==========================================
 
-    overall_statistics = calculate_overall_statistics(df)
+    try:
 
-    subject_statistics = calculate_subject_statistics(df)
+        
+        overall_statistics = calculate_overall_statistics(df)
+
+        subject_statistics = calculate_subject_statistics(df)
+
+    except Exception as e:
+
+        logger.error(
+            "Analytics calculation failed for %s: %s",
+            uploaded_file.filename,
+            e
+        )
+
+        return render_template(
+            "index.html",
+            message = "Unable to calculate student analytics. Please check the uploaded data. "
+        )
+
+    logger.info(
+        "Analytics calculated successfully for: %s",
+        uploaded_file.filename
+    )
 
     insert_report(
         uploaded_file.filename,
@@ -156,11 +259,26 @@ def home():
     # Generate Charts
     # ==========================================
 
-    create_subject_bar_chart(subject_statistics)
+    try:
 
-    create_pass_fail_pie_chart(overall_statistics)
+        create_subject_bar_chart(subject_statistics)
 
-    create_marks_histogram(df)
+        create_pass_fail_pie_chart(overall_statistics)
+
+        create_marks_histogram(df)
+
+    except Exception as e:
+
+        logger.error(
+            "Chart generation failed for %s: %s",
+            uploaded_file.filename,
+            e
+        )
+
+        return render_template(
+            "index.html",
+            message = "Unable to generate analytics charts. Please try again. "
+        )
 
 
     # ==========================================
@@ -174,6 +292,99 @@ def home():
         subject_statistics=subject_statistics,
         student_records=student_records
     )
+
+
+# =====================================================
+# Existing Dashboard Route
+# =====================================================
+
+@app.route("/dashboard")
+def dashboard():
+
+    # ==========================================
+    # Get Saved File Path
+    # ==========================================
+
+    file_path = session.get("file_path")
+
+
+    # ==========================================
+    # Check Whether File Exists
+    # ==========================================
+
+    if not file_path or not os.path.exists(file_path):
+
+        return render_template(
+            "index.html",
+            message="Please upload a CSV file first."
+        )
+
+
+    # ==========================================
+    # Read Saved CSV
+    # ==========================================
+
+    try:
+
+        df = pd.read_csv(file_path)
+
+    except Exception as e:
+
+        logger.error(
+            "Failed to read saved CSV while opening dashboard: %s",
+            e
+        )
+
+        return render_template(
+            "index.html",
+            message="Unable to read the saved CSV file."
+        )
+
+
+    # ==========================================
+    # Calculate Dashboard Statistics
+    # ==========================================
+
+    try:
+
+        overall_statistics = calculate_overall_statistics(df)
+
+        subject_statistics = calculate_subject_statistics(df)
+
+    except Exception as e:
+
+        logger.error(
+            "Dashboard analytics calculation failed: %s",
+            e
+        )
+
+        return render_template(
+            "index.html",
+            message="Unable to calculate student analytics."
+        )
+
+
+    # ==========================================
+    # Convert Student Data for Jinja
+    # ==========================================
+
+    student_records = df.to_dict(
+        orient="records"
+    )
+
+
+    # ==========================================
+    # Render Existing Dashboard
+    # ==========================================
+
+    return render_template(
+        "dashboard.html",
+        overall_statistics=overall_statistics,
+        subject_statistics=subject_statistics,
+        student_records=student_records
+    )
+
+
 
 
 @app.route("/history")
@@ -224,7 +435,7 @@ def search_student():
     # Get Student Name
     # ==========================================
 
-    search_name = request.form["student_name"].strip()
+    search_name = request.form.get("student_name", "").strip()
 
 
     # ==========================================
@@ -254,7 +465,12 @@ def search_student():
 
         df = pd.read_csv(file_path)
 
-    except Exception:
+    except Exception as e:
+
+        logger.error(
+            "Failed to read saved CSV during student search: %s",
+            e
+        )
 
         return render_template(
             "index.html",
@@ -278,6 +494,22 @@ def search_student():
     student_records = df.to_dict(
         orient="records"
     )
+
+
+    # ==========================================
+    # Validate Search Input
+    # ==========================================
+
+    if not search_name:
+
+        return render_template(
+            "dashboard.html",
+            message="Please enter a student name.",
+            message_type="error",
+            overall_statistics=overall_statistics,
+            subject_statistics=subject_statistics,
+            student_records=student_records
+        )
 
 
     # ==========================================
@@ -356,7 +588,12 @@ def filter_students():
 
         df = pd.read_csv(file_path)
 
-    except Exception:
+    except Exception as e:
+
+        logger.error(
+            "Failed to read saved CSV during filtering: %s",
+            e
+        )
 
         return render_template(
             "index.html",
@@ -365,10 +602,59 @@ def filter_students():
 
 
     # ==========================================
-    # Get Filter Value
+    # Get Filter and Sort Values
     # ==========================================
 
-    result_filter = request.form["result_filter"]
+    result_filter = request.form.get(
+        "result_filter",
+        "All"
+    )
+
+    sort_by = request.form.get(
+        "sort_by",
+        "Total"
+    )
+
+    sort_order = request.form.get(
+        "sort_order",
+        "descending"
+    )
+
+
+    # ==========================================
+    # Validate Result Filter
+    # ==========================================
+
+    if result_filter not in ALLOWED_FILTERS:
+
+        return render_template(
+            "index.html",
+            message="Invalid filter selected."
+        )
+
+
+    # ==========================================
+    # Validate Sort Column
+    # ==========================================
+
+    if sort_by not in ALLOWED_SORT_COLUMNS:
+
+        return render_template(
+            "index.html",
+            message="Invalid sort column selected."
+        )
+
+
+    # ==========================================
+    # Validate Sort Order
+    # ==========================================
+
+    if sort_order not in ALLOWED_SORT_ORDERS:
+
+        return render_template(
+            "index.html",
+            message="Invalid sort order selected."
+        )
 
 
     # ==========================================
@@ -390,15 +676,6 @@ def filter_students():
     else:
 
         filtered_df = df
-
-
-    # ==========================================
-    # Get Sorting Values
-    # ==========================================
-
-    sort_by = request.form["sort_by"]
-
-    sort_order = request.form["sort_order"]
 
 
     # ==========================================
@@ -492,7 +769,12 @@ def export_csv():
 
         df = pd.read_csv(file_path)
 
-    except Exception:
+    except Exception as e:
+
+        logger.error(
+            "Failed to read saved CSV during CSV export: %s",
+            e
+        )
 
         return render_template(
             "index.html",
@@ -504,11 +786,56 @@ def export_csv():
     # Get Filter and Sort Values
     # ==========================================
 
-    result_filter = request.form["result_filter"]
+    result_filter = request.form.get(
+        "result_filter",
+        "All"
+    )
 
-    sort_by = request.form["sort_by"]
+    sort_by = request.form.get(
+        "sort_by",
+        "Total"
+    )
 
-    sort_order = request.form["sort_order"]
+    sort_order = request.form.get(
+        "sort_order",
+        "descending"
+    )
+
+
+    # ==========================================
+    # Validate Result Filter
+    # ==========================================
+
+    if result_filter not in ALLOWED_FILTERS:
+
+        return render_template(
+            "index.html",
+            message="Invalid filter selected."
+        )
+
+
+    # ==========================================
+    # Validate Sort Column
+    # ==========================================
+
+    if sort_by not in ALLOWED_SORT_COLUMNS:
+
+        return render_template(
+            "index.html",
+            message="Invalid sort column selected."
+        )
+
+
+    # ==========================================
+    # Validate Sort Order
+    # ==========================================
+
+    if sort_order not in ALLOWED_SORT_ORDERS:
+
+        return render_template(
+            "index.html",
+            message="Invalid sort order selected."
+        )
 
 
     # ==========================================
@@ -618,7 +945,12 @@ def generate_pdf():
 
         df = pd.read_csv(file_path)
 
-    except Exception:
+    except Exception as e:
+
+        logger.error(
+            "Failed to read saved CSV during PDF generation: %s",
+            e
+        )
 
         return render_template(
             "index.html",
@@ -630,11 +962,56 @@ def generate_pdf():
     # Get Filter and Sort Values
     # ==========================================
 
-    result_filter = request.form["result_filter"]
+    result_filter = request.form.get(
+        "result_filter",
+        "All"
+    )
 
-    sort_by = request.form["sort_by"]
+    sort_by = request.form.get(
+        "sort_by",
+        "Total"
+    )
 
-    sort_order = request.form["sort_order"]
+    sort_order = request.form.get(
+        "sort_order",
+        "descending"
+    )
+
+
+    # ==========================================
+    # Validate Result Filter
+    # ==========================================
+
+    if result_filter not in ALLOWED_FILTERS:
+
+        return render_template(
+            "index.html",
+            message="Invalid filter selected."
+        )
+
+
+    # ==========================================
+    # Validate Sort Column
+    # ==========================================
+
+    if sort_by not in ALLOWED_SORT_COLUMNS:
+
+        return render_template(
+            "index.html",
+            message="Invalid sort column selected."
+        )
+
+
+    # ==========================================
+    # Validate Sort Order
+    # ==========================================
+
+    if sort_order not in ALLOWED_SORT_ORDERS:
+
+        return render_template(
+            "index.html",
+            message="Invalid sort order selected."
+        )
 
 
     # ==========================================
@@ -718,12 +1095,31 @@ def generate_pdf():
     # Create PDF
     # ==========================================
 
-    create_pdf_report(
-        pdf_path,
-        overall_statistics,
-        subject_statistics,
-        student_records
-    )
+    try:
+
+        
+        create_pdf_report(
+            pdf_path,
+            overall_statistics,
+            subject_statistics,
+            student_records
+        )
+
+    except Exception as e:
+
+        logger.error(
+            "PDF generation failed: %s",
+            e
+        )
+
+        return render_template(
+            "dashboard.html",
+            message="Unable to generate the PDF report. Please try again.",
+            message_type="error",
+            overall_statistics=overall_statistics,
+            subject_statistics=subject_statistics,
+            student_records=student_records
+        )
 
 
     # ==========================================
@@ -736,6 +1132,16 @@ def generate_pdf():
         as_attachment=True,
         download_name="student_performance_report.pdf"
     )
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("404.html"), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template("500.html"), 500
 
 
 
